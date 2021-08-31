@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <h1>Subscribe for Updates</h1>
+
+    <!--need to connect form action to a Flask route once that's merged, 
+            collect fname, lname, and email and commit to db -->
+            
+    <form action="/collect-emails" method="POST">
+      
+        <label for="fname">First Name</label>
+        <input required type="text" name="fname" id="fname">
+
+        <label for="lname">Last Name</label>
+        <input required type="text" name="lname" id="lname">
+
+        <label for="email">Email</label>
+        <input required type="text" name="email" id="email" placeholder="name@example.com">
+        
+        <button type="submit">Subscribe</button>
+
+    </form>
+    
+{% endblock %}
