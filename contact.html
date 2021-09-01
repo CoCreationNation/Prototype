@@ -1,15 +1,17 @@
 {% extends "base.html" %} 
 
-{% block title %}Contact{% endblock %}
+{% block title %}Contact Us{% endblock %}
 
 {% block content %}
 
-    <h1>Subscribe for Updates</h1>
+    <h1>Send Us A Message!</h1>
 
     <!--need to connect form action to a Flask route once that's merged, 
-            collect fname, lname, and email and commit to db -->
+            collect fname, lname, and email and commit to db ? -->
+
+    <!--we probably need an API to send this message to whatever email we want-->
             
-    <form action="/collect-emails" method="POST">
+    <form action="/send-contact-msg" method="POST">
       
         <label for="fname">First Name</label>
         <input required type="text" name="fname" id="fname">
@@ -20,7 +22,10 @@
         <label for="email">Email</label>
         <input required type="text" name="email" id="email" placeholder="name@example.com">
         
-        <button type="submit">Subscribe</button>
+        <label for="message">Message</label>
+        <textarea rows="10" cols = "20" name="message" id="message" placeholder="Write your message here!">
+
+        <button type="submit">Send Message</button>
 
     </form>
     
