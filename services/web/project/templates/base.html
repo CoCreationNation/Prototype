@@ -1,17 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    <style>
-    {% block styling %}
-    body{
-        background: purple;
-    }
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>{% block title %}{% endblock %} - CoCreation Nation</title>
     {% endblock %}
-    </style>
 </head>
+
 <body>
-    {% block content %}{% endblock %}
+    <nav>
+        <ul class="menu">
+            <li class="logo"><a href="#">CoCreation Nation</a></li>
+            <li class="item"><a href="#">Home</a></li>
+            <li class="item"><a href="#">About</a></li>
+            <li class="item has-submenu">
+                <a tabindex="0">Events</a>
+                <ul class="submenu">
+                    <li class="subitem"><a href="#">Upcoming Events</a></li>
+                    <li class="subitem"><a href="#">Create Event</a></li>
+                    <li class="subitem"><a href="#">Join Event</a></li>
+                </ul>
+            </li>
+            <li class="item"><a href="#">Blog</a></li>
+            <li class="item"><a href="#">Contact</a>
+            </li>
+            <li class="item button"><a href="#">Log In</a></li>
+            <li class="item button secondary"><a href="#">Sign Up</a></li>
+            <li class="toggle"><a href="#"><i class="fas fa-bars"></i></a></li>
+        </ul>
+    </nav>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2021 by CoCreation Nation</a>.
+        {% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
 </body>
+
 </html>

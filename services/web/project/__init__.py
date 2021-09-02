@@ -1,3 +1,8 @@
+
+"""
+This file is used to instantiate the Flask app.
+"""
+
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -41,3 +46,6 @@ def register():
     registration_form = registration.RegistrationForm()
     # if registration_form.validate_on_submit():
     return render_template('register.html', form=registration_form)
+# while it is usually better to do all imports at the top of the file, importing here mid-file is a best practice for Flask
+from project import models  
+from project import views
