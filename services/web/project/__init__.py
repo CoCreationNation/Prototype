@@ -1,8 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from . import registration
-
+from project import forms
 app = Flask(__name__, template_folder='templates')
 app.config.from_object("project.config.Config")
 app.secret_key = "any-string"
@@ -27,7 +26,7 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    login_form = registration.LoginForm()
+    login_form = forms.LoginForm()
     if login_form.validate_on_submit():
         if login_form.email.data == "admin@email.com" and login_form.password.data == "12345678":
             return render_template("success.html")
@@ -38,6 +37,6 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    registration_form = registration.RegistrationForm()
+    registration_form = forms.RegistrationForm()
     # if registration_form.validate_on_submit():
     return render_template('register.html', form=registration_form)
