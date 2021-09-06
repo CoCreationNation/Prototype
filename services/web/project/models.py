@@ -3,6 +3,14 @@ This file contains all the database models for the Flask app.
 """
 from project import db
 
+#for pronouns
+import enum 
+
+class Pronouns(enum.Enum): 
+    she = "She/Her"
+    he = "He/Him"
+    they = "They/Them"
+    other = "Other"
 
 class User(db.Model):
     __tablename__ = "users"
@@ -16,7 +24,7 @@ class User(db.Model):
     is_superuser = db.Column(db.Boolean()) #how are we defining this? do we want a default value?
     last_name = db.Column(db.String, nullable=False)
     first_name = db.Column(db.String, nullable=False)
-    pronouns = db.Column(db.String)
+    pronouns = db.Column(db.Enum(Pronouns))
     email = db.Column(db.String(128), unique=True, nullable=False)
     email_confirmed = db.Column(db.Boolean(), default=True)
     address_1 = db.Column(db.String, nullable=False) #should any of these address fields should be nullable=False?
