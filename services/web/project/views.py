@@ -1,7 +1,7 @@
 """
 This file contains all the routes for the Flask app.
 """
-from Prototype.services.web.project import forms
+
 from flask import render_template
 
 from project import app
