@@ -21,7 +21,7 @@ class User(db.Model):
                     nullable=False)
     password_hash = db.Column(db.String, unique=True, nullable=False) #need to incorporate password_hash algo somehow
     user_type = db.Column(db.String)
-    is_superuser = db.Column(db.Boolean()) #how are we defining this? do we want a default value?
+    is_superuser = db.Column(db.Boolean(), default=False)
     last_name = db.Column(db.String, nullable=False)
     first_name = db.Column(db.String, nullable=False)
     pronouns = db.Column(db.Enum(Pronouns))
