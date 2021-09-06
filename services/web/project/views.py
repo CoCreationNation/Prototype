@@ -29,6 +29,4 @@ def register():
     # if registration_form.validate_on_submit():
     return render_template('register.html', form=registration_form)
 
-# while it is usually better to do all imports at the top of the file, importing here mid-file is a best practice for Flask
-from project import models  
-from project import views
+
