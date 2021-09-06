@@ -36,9 +36,6 @@ class User(db.Model):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
     deleted_at = db.Column(db.DateTime)
-    
-    #did is_superuser replace the active field? can we delete this?
-    active = db.Column(db.Boolean(), default=True, nullable=False) 
 
     def __init__(self, email):
         self.email = email
