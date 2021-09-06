@@ -26,7 +26,7 @@ class User(db.Model):
     first_name = db.Column(db.String, nullable=False)
     pronouns = db.Column(db.Enum(Pronouns))
     email = db.Column(db.String(128), unique=True, nullable=False)
-    email_confirmed = db.Column(db.Boolean(), default=True)
+    email_confirmed = db.Column(db.Boolean(), default=False)
     address_1 = db.Column(db.String, nullable=False) #should any of these address fields should be nullable=False?
     address_2 = db.Column(db.String)
     city = db.Column(db.String)
