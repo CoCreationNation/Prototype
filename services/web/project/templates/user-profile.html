@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+<!--add logic to base to only show Log In and Sign Up if not logged in?-->
+
+{% block title %}
+My Profile
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome back, user_first_name here !</h1> <!--Include actual Jinja components once we have db set up-->
+</div>
+
+<br>
+
+<div class="container">
+    <h4>Personal Information</h4>
+    <br>
+    <h7><b>Name:</b> user_first_name user_last_name here</h7>
+    <br>
+    <h7><b>Pronouns:</b> user_pronouns here</h7>
+    <br>
+    <h7><b>Email:</b> user_email here</h7>
+    <br>
+    <h7><b>Phone</b> user_phone_number here</h7>
+    <br>
+    <h7><b>Zipcode:</b> user_zipcode here</h7>
+    <br>
+    <h7><b>Profile Picture</b></h7>
+    <input required type="file" accept="image/*" name="image" id="file">
+</div>
+
+<br>
+
+<div class="container">
+    <button type="click" id="update-profile">Update Profile</button>
+</div>
+
+<br>
+
+<!--Could include Events Attended in a second column-->
+<div class="container"></div>
+     <h4>Events Attended</h4>
+</div>
+
+{% endblock %}
