@@ -1,3 +1,4 @@
+
 """
 This file is used to instantiate the Flask app.
 """
@@ -5,10 +6,11 @@ This file is used to instantiate the Flask app.
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+from flask_bootstrap import Bootstrap
 
-
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config.from_object("project.config.Config")
+Bootstrap(app)
 db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
