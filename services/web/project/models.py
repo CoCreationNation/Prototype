@@ -59,6 +59,3 @@ class User(UserMixin, db.Model):
 
     # added a __repr__ to help visualize the User object
 
-
-def __repr__(self):
-    return f'<User id={self.id} email={self.email}>'

@@ -2,7 +2,6 @@
 This file contains all the routes for the Flask app.
 """
 
-from flask import render_template
 from project import app
 from project import forms
 from project import db
