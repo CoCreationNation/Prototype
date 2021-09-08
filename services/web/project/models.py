@@ -1,6 +1,8 @@
 """
 This file contains all the database models for the Flask app.
 """
+from sqlalchemy import sql
+
 from project import db
 
 #for pronouns
@@ -37,9 +39,19 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime)
     deleted_at = db.Column(db.DateTime)
 
-    def __init__(self, email):
-        self.email = email
-
-    #added a __repr__ to help visualize the User object
     def __repr__(self):
-        return f'<User id={self.id} email={self.email}>'    
+        return f'<User id={self.id} email={self.email}>'  
+
+
+class Event(db.Model):
+    __tablename__ = "events"
+
+    id = db.Column(db.Integer, primary_key=True)
+    start_utc = db.Column(db.DateTime(timezone=True), nullable=False)
+    end_utc = db.Column(db.DateTime(timezone=True), nullable=False)
+    title = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=sql.func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=sql.func.now(), nullable=True)
+    deleted_at = db.Column(db.DateTime(timezone=True), nullable=True)
