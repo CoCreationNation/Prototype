@@ -1,3 +1,8 @@
+
+"""
+This file is used to initiate all forms
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, PasswordField, SubmitField
 from wtforms.fields.html5 import DateTimeLocalField
