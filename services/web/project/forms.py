@@ -19,5 +19,4 @@ class RegistrationForm(FlaskForm):
     name = StringField(label='Name', validators=[DataRequired()])
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     city = StringField(label='City', validators=[DataRequired()])
-    password = StringField(label='Password', validators=[DataRequired()])
-    submit = SubmitField(label="Sign me Up")
+    

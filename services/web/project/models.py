@@ -51,7 +51,7 @@ class User(UserMixin, db.Model):
     updated_at = db.Column(db.DateTime)
     deleted_at = db.Column(db.DateTime)
 
-#db.create_all()
+
 
 
 
