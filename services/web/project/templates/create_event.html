@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block content %}
+<h2>Create Event</h2>
+<form method="POST" action="{{ url_for('create_event') }}">
+    {{ form.csrf_token }}
+    {{ form.title.label }} {{ form.title(size=20) }}
+    {{ form.description.label }} {{ form.description() }}
+    {{ form.start.label }} {{ form.start() }}
+    {{ form.end.label }} {{ form.end() }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
