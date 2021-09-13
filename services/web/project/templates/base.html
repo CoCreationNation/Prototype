@@ -22,10 +22,13 @@
                 </ul>
             </li>
             <li class="item"><a href="#">Blog</a></li>
-            <li class="item"><a href="#">Contact</a>
-            </li>
+            <li class="item"><a href="#">Contact</a></li>
+            {% if current_user.is_authenticated %}
+            <li class="item button secondary"><a href="{{ url_for('logout') }}">Sign Out</a></li>
+            {% else %}
             <li class="item button"><a href="{{ url_for('login') }}">Log In</a></li>
             <li class="item button secondary"><a href="{{ url_for('register') }}">Sign Up</a></li>
+            {% endif %}
             <li class="toggle"><a href="#"><i class="fas fa-bars"></i></a>
             </li>
         </ul>
@@ -33,6 +36,7 @@
     <div id="content">{% block content %}{% endblock %}</div>
     <div id="footer">
         {% block footer %}
+        <br>
         &copy; Copyright 2021 by CoCreation Nation</a>.
         {% endblock %}
     </div>
