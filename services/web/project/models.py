@@ -20,7 +20,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-
 class Pronouns(enum.Enum):
     she = "She/Her"
     he = "He/Him"
@@ -38,8 +37,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String, unique=True, nullable=False)  # need to incorporate password_hash algo somehow
     user_type = db.Column(db.String)
     is_superuser = db.Column(db.Boolean(), default=False)
-    last_name = db.Column(db.String, nullable=False)
-    first_name = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=True)
+    first_name = db.Column(db.String, nullable=True)
     pronouns = db.Column(db.Enum(Pronouns))
     email = db.Column(db.String(128), unique=True, nullable=False)
     email_confirmed = db.Column(db.Boolean(), default=False)
@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
     address_2 = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
-    zipcode = db.Column(db.Integer, nullable=False)
+    zip_code = db.Column(db.Integer, nullable=False)
     phone_number = db.Column(db.String)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)

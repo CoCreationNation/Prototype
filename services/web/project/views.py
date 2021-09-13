@@ -5,7 +5,7 @@ This file contains all the routes for the Flask app.
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
-from flask_login import login_user
+from flask_login import login_user, logout_user, login_required
 
 from project import app
 from project import db
@@ -55,6 +55,7 @@ def view_event_details(event_id: int):
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    form = forms.LoginForm()
     if request.method == "POST":
         email = request.form.get('email')
         password = request.form.get('password')
@@ -71,12 +72,15 @@ def login():
         # Email exists and password correct
         else:
             login_user(user)
-            return redirect(url_for('success'))
+            flash(f"Welcome, {user.username}")
+            return redirect(url_for('index'))
 
-    return render_template("login.html")
+    return render_template("login.html", form=form)
+
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    form = forms.RegistrationForm()
     if request.method == "POST":
 
         if User.query.filter_by(email=request.form.get('email')).first():
@@ -91,16 +95,25 @@ def register():
         )
         new_user = User(
             email=request.form.get('email'),
-            first_name=request.form.get('first_name'),
+            username=request.form.get('username'),
             password=hash_and_salted_password,
+            zip_code=request.form.get('zip_code')
         )
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        return redirect(url_for("success"))
+        flash('Your account has been registered.')
+        return redirect(url_for("index"))
 
-    return render_template("register.html")
+    return render_template("register.html", form=form)
 
+
+@app.route('/logout', methods=["GET"])
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('index'))
 
 
 @app.route("/user-profile/") #eventually should be ("/user-profile/<user_id>")

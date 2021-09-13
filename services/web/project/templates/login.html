@@ -11,9 +11,10 @@
       {% endif %}
     {% endwith %}
     <form method="post">
-        <input type="text" name="email" placeholder="Email" required="required"/>
-        <input type="password" name="password" placeholder="Password" required="required"/>
-        <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+      {{ form.csrf_token }}
+      {{ form.email.label }} {{ form.email() }}
+      {{ form.password.label }} {{ form.password() }}
+      <input type="submit" value="Submit">
     </form>
 </div>
 
