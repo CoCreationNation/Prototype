@@ -119,7 +119,11 @@ def logout():
 @app.route("/user-profile/") #eventually should be ("/user-profile/<user_id>")
 def show_profile():
     """Show a user's profile with their account info"""
-    return render_template("user-profile.html")
+    
+    #what info do we have stored so we can retrieve the user obejct from db?
+    user = helpers.retrieve_user_info(id)
+
+    return render_template("user-profile.html", user=user)
     
     #PSEUDOCODE--
 
@@ -129,3 +133,10 @@ def show_profile():
     #if we are not logged in...
         #flash("Access Denied. Register an account to access this page!")
         #return redirect("/")
+@app.route("/all-users")
+def show_all_users(): 
+    """Show list of all users"""
+
+    users = User.query.all()
+
+    return render_template("all-users.html")
