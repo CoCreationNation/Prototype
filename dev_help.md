@@ -26,6 +26,11 @@ If you are having trouble running locally, you may need to update the permission
 chmod +x services/web/entrypoint.sh
 ```
 
+To shell into the container running the Flask app, execute:
+```
+docker exec -it prototype_web_1 /bin/bash
+```
+
 ## DB
 
 To access the DB directly, execute:
