@@ -138,5 +138,5 @@ def show_all_users():
     """Show list of all users"""
 
     users = User.query.all()
-
-    return render_template("all-users.html")
+    
+    return render_template("all-users.html", users=users)
