@@ -117,23 +117,17 @@ def logout():
 
 
 @app.route("/user-profile/<user_id>")
+@login_required
 def show_profile(user_id):
     """Show a user's profile with their account info"""
     
-    #what info do we have stored so we can retrieve the user obejct from db?
     user = helpers.get_user_info(user_id)
 
     return render_template("user-profile.html", user=user)
-    
-    #PSEUDOCODE--
 
-    #get user_id from sessions
-    #if we are logged in, get user's info from db and display on page
-        #return render_template("user-profile.html", + data we want to display in Jinja)
-    #if we are not logged in...
-        #flash("Access Denied. Register an account to access this page!")
-        #return redirect("/")
+
 @app.route("/all-users")
+@login_required
 def show_all_users(): 
     """Show list of all users"""
 
