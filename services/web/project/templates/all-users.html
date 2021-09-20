@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-<!--add logic to base to only show Log In and Sign Up if not logged in?-->
 
 {% block title %}
 Users List
@@ -9,20 +8,20 @@ Users List
 <h2>All Users</h2>
 <br>
 
+<ol>
 {%if users%}
     {% for user in users %} 
-    <div>
         <li class="user" id="{{user.id}}">
 
             <a href = "/user-profile/{{user.id}}"> <!--this link won't work yet-->
                 {{ user.first_name }} {{ user.last_name }}
             </a>
         </li>
-    </div>
     {% endfor %}
 
 {% else %}
     <h7>No users here.</h7>
-{% endif %} 
+{% endif %}
+</ol> 
 
 {% endblock %}
