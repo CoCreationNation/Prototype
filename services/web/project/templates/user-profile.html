@@ -7,7 +7,11 @@ My Profile
 
 {% block content %}
 <div class="container">
-    <h1>Welcome back, {{user.first_name}}{{user_last_name}}!</h1> 
+    {% if user.first_name and user.last_name %}
+        <h1>Welcome back, {{user.first_name}} {{user_last_name}}!</h1> 
+    {% else %}
+        <h1>Welcome back, {{user.username}}!</h1> 
+    {% endif %}
 </div>
 
 <br>
@@ -15,7 +19,7 @@ My Profile
 <div class="container">
     <h4>Personal Information</h4>
     <br>
-    <h7><b>Name:</b>{{user.first_name}}{{user.last_name}}</h7>
+    <h7><b>Name:</b>{{user.first_name}} {{user.last_name}}</h7>
     <br>
     <h7><b>Pronouns:</b>{{user.pronouns}} here</h7>
     <br>
@@ -26,6 +30,7 @@ My Profile
     <h7><b>Zipcode:</b>{{user.zipcode here}}</h7>
     <br>
     <h7><b>Profile Picture</b></h7>
+    <!--TODO: display user profile pictures here-->
     <input required type="file" accept="image/*" name="image" id="file">
 </div>
 
