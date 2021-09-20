@@ -116,12 +116,12 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route("/user-profile/") #eventually should be ("/user-profile/<user_id>")
-def show_profile():
+@app.route("/user-profile/<user_id>")
+def show_profile(user_id):
     """Show a user's profile with their account info"""
     
     #what info do we have stored so we can retrieve the user obejct from db?
-    user = helpers.retrieve_user_info(id)
+    user = helpers.get_user_info(user_id)
 
     return render_template("user-profile.html", user=user)
     
