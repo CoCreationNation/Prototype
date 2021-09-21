@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Users List
+{% endblock %}
+
+{% block content %}
+<h2>All Users</h2>
+<br>
+
+<ol>
+{%if users%}
+    {% for user in users %} 
+        <li class="user" id="{{user.id}}">
+
+            <a href = "/user-profile/{{user.id}}">
+               
+               {%if user.first_name and user.last_name%}
+                    {{ user.first_name }} {{ user.last_name }}
+                {% else %}
+                    {{user.username}}
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+
+{% else %}
+    <h7>No users here.</h7>
+{% endif %}
+</ol> 
+
+{% endblock %}
