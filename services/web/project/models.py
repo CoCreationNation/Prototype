@@ -69,3 +69,61 @@ class Event(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=sql.func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=sql.func.now(), nullable=True)
     deleted_at = db.Column(db.DateTime(timezone=True), nullable=True)
+
+    #users table and events table
+
+class EventEligibility(db.Model):
+    __tablename__ = "event_eligible_attendees"
+
+    id = db.Column(db.Integer, primary_key=True)
+    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+#users table and events table
+
+class EventAdmin(db.Model):
+    __tablename__ = "event_admins"
+
+    id = db.Column(db.Integer, primary_key=True)
+    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    admin_level = db.Column(db.String, nullable= True) # levels are considered as "level one, two etc"
+
+
+#users table and events
+
+class EventAttendees(db.Model):
+    __tablename__ = "event_attendees"
+
+    id = db.Column(db.Integer, primary_key=True)
+    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    attendee_id =db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    rsvp_at =db.Column(db.String) # considered rsvp at host email id 
+    attended_at = db.Column(db.Boolean(), default=False) #attended the event yes /No
+
+#events
+class EventTags(db.Model):
+    __tablename__ = "event_tags"
+
+    id = db.Column(db.Integer, primary_key=True)
+    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    tag =db.Column(db.String, nullable= False)
+
+class EventEligibleZipcode(db.Model):
+    __tablename__ = "event_elogible_zipcodes"
+
+    eligible_zipcodes = db.Column(db.Integer, primary_key=True)
+    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    zipcode =db.Column(db.Integer, nullable= False)
+
+# for contact us page
+class ContactUs(db.Model):
+    __tablename__ = "contact_us"
+
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String, nullable=False)
+
+
+
+
+
