@@ -121,7 +121,7 @@ def logout():
 def show_profile(user_id):
     """Show a user's profile with their account info"""
     
-    user = helpers.get_user_info(user_id)
+    user = helpers.get_user_info(user_id) #TODO: grab user.id via sessions
 
     return render_template("user-profile.html", user=user)
 
