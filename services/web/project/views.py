@@ -123,7 +123,7 @@ def show_profile(user_id):
     
     user = helpers.get_user_info(user_id) #TODO: grab user.id via sessions
 
-    return render_template("user-profile.html", user=user)
+    return render_template("user-profile.html", user=user) #TODO: pass in events user has attended
 
 
 @app.route("/all-users")
