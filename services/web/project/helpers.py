@@ -12,18 +12,21 @@ def get_user_info(user_id):
     
     return models.User.query.get(user_id)
 
-def get_past_events() -> list:
-    now = datetime.now()
-    past_events = models.Event.query.filter(models.Event.end_utc < now).all()
-    return past_events
-
-def get_user_events(user_id):
+def get_user_events(user_id): #TODO: order events by date
     """Retrieve the events a user has attended"""
     
-    get_past_events
+    #identify all records in event_attendees 1) that are attached to user and 2) where the user actually attended
+    user_attendee_records = models.EventAttendees.query.filter(models.EventAttendees.attendee_id == user_id, 
+                                                                models.EventAttendees.attended_at == True).all()
+    user_past_events = set()
+    now = datetime.now()
 
-    #if a user_id == attendee_id in any of these events
-    #OR is a user already connected to the events they've RSVPed to in models.py?
-    #return user_events
-
+    #now isolate the event records using the ids from event_attendees AND where event has already passed
+    for record in user_attendee_records: 
+        event = models.Event.query.filter(models.Event.id == record.event_id).first()
+        #now make sure the event has already passed 
+        if (event.end_utc < now): 
+            user_past_events.add(event)
+        
+    return user_past_events
 
