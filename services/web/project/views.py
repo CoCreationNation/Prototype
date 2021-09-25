@@ -134,3 +134,25 @@ def show_all_users():
     users = User.query.all()
     
     return render_template("all-users.html", users=users)
+
+@app.route("/events/<id>", methods=["POST"])
+def rsvp_event(event_id):
+    """Saves event to user profile when they RSVP."""
+
+    event_id = request.form.get("rsvp")
+    user = helpers.get_user_info(user_id)
+    event = helpers.get_event_by_id(event_id)
+
+    if user:
+        if event in user.events:
+            print("You have already RSVP'd to this event.")
+        else:
+            user_events = helpers.save_event_to_user(event, user)
+            print("Event saved!")
+    else:
+        print("You must be logged in to RSVP to events!")
+        return redirect("/login")
+
+    return redirect("/user-profile")
+
+
