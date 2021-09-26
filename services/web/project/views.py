@@ -5,7 +5,7 @@ This file contains all the routes for the Flask app.
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from project import app
 from project import db
@@ -121,9 +121,12 @@ def logout():
 def show_profile(user_id):
     """Show a user's profile with their account info"""
     
-    user = helpers.get_user_info(user_id)
-
-    return render_template("user-profile.html", user=user)
+    user = helpers.get_user_info(user_id) 
+    attended_events = helpers.get_user_events(user_id)
+    
+    #TODO: implement current_user from flask_login extension to only make the logged in user's profile editable
+        # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
+    return render_template("user-profile.html", user=user, events=attended_events)
 
 
 @app.route("/all-users")
