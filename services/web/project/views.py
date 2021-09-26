@@ -121,10 +121,10 @@ def logout():
 def show_profile(user_id):
     """Show a user's profile with their account info"""
     
-    user = helpers.get_user_info(user_id) #TODO: grab user.id via sessions
+    user = helpers.get_user_info(user_id) #TODO: grab user.id via sessions?
     attended_events = helpers.get_user_events(user_id)
 
-    return render_template("user-profile.html", user=user, events=attended_events) #TODO: pass in events user has attended
+    return render_template("user-profile.html", user=user, events=attended_events)
 
 
 @app.route("/all-users")
