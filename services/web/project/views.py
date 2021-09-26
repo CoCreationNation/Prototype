@@ -3,6 +3,7 @@ This file contains all the routes for the Flask app.
 """
 
 
+from Prototype.services.web.project.models import EventAttendees
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required
@@ -140,17 +141,25 @@ def rsvp_event(event_id):
     """Saves event to user profile when they RSVP."""
 
     event_id = request.form.get("rsvp")
-    user = helpers.get_user_info(user_id)
+    user = helpers.get_user_info(session["user"])
     event = helpers.get_event_by_id(event_id)
+    user_events = helpers.get_user_events(user)
 
     if user:
-        if event in user.events:
-            print("You have already RSVP'd to this event.")
+        if event in user_events:
+            flash("You have already RSVP'd to this event.")
         else:
-            user_events = helpers.save_event_to_user(event, user)
-            print("Event saved!")
+            rsvp_event = EventAttendees(
+                event_id=event_id,
+                attendee_id=user,
+                rsvp_at=
+                attended_at=True
+            )
+            db.session.add(rsvp_event)
+            db.session.commit()
+            flash("Event saved!")
     else:
-        print("You must be logged in to RSVP to events!")
+        flash("You must be logged in to RSVP to events!")
         return redirect("/login")
 
     return redirect("/user-profile")

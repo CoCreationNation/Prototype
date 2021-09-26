@@ -17,14 +17,4 @@ def get_event_by_id(event_id):
 
     return models.Event.query.get(event_id)
 
-def save_event_to_user(event, user):
-    """Saves event to user when they RSVP."""
-
-    user.events.append(event)
-    db.session.add(user)
-    db.session.commit()
-
-    return user.events
-
-
 
