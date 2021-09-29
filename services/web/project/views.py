@@ -47,10 +47,6 @@ def create_event():
 @app.route('/events', methods=["POST"])
 def view_events():
     events = helpers.get_future_events()
-
-    if request.method == "POST":
-        rsvp_event(events)
-    
     return render_template('events.html', events=events)
 
 
