@@ -3,7 +3,7 @@ This file contains all the routes for the Flask app.
 """
 
 
-from Prototype.services.web.project.models import EventAttendees
+from Prototype.services.web.project.models 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required
@@ -142,14 +142,13 @@ def rsvp_event(event_id):
 
     event_id = request.form.get("rsvp")
     user = helpers.get_user_info(session["user"])
-    event = helpers.get_event_by_id(event_id)
     user_events = helpers.get_user_events(user)
 
     if user:
         if event in user_events:
             flash("You have already RSVP'd to this event.")
         else:
-            rsvp_event = EventAttendees(
+            rsvp_event = models.EventAttendees(
                 event_id=event_id,
                 attendee_id=user,
                 rsvp_at=

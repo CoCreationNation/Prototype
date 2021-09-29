@@ -16,5 +16,3 @@ def get_event_by_id(event_id):
     """Return an event by primary key/id."""
 
     return models.Event.query.get(event_id)
-
-
