@@ -8,7 +8,7 @@
 <div>Start: {{ event.start_utc }}</div>
 <div>End: {{ event.end_utc }}</div>
 <div>
-<form>
+<form action="/event/{{ event.id }}" method="POST">
     <input type="hidden" name="rsvp" value="{{ event.id }}">
     <button id="rsvp">RSVP</button>
 </form>

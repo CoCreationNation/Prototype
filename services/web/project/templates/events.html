@@ -18,12 +18,6 @@
         <td>{{ event.description }}</td>
         <td>{{ event.start_utc }}</td>
         <td>{{ event.end_utc }}</td>
-        <td>
-        <form>
-            <input type="hidden" name="rsvp" value="{{ event.id }}">
-            <button id="rsvp">RSVP</button>
-        </form>
-        </td>
     </tr>
     {% endfor %}
 </table>

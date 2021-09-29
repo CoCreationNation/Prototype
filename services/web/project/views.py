@@ -6,7 +6,7 @@ This file contains all the routes for the Flask app.
 from Prototype.services.web.project.models 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from project import app
 from project import db
@@ -15,6 +15,8 @@ from project import db
 from project.models import User
 from project import models
 from project import helpers
+
+from datetime import datetime
 
 
 
@@ -42,16 +44,51 @@ def create_event():
     return render_template('create_event.html', form=form)
 
 
-@app.route('/events')
+@app.route('/events', methods=["POST"])
 def view_events():
     events = helpers.get_future_events()
+
+    if request.method == "POST":
+        rsvp_event(events)
+    
     return render_template('events.html', events=events)
 
 
-@app.route('/events/<int:event_id>')
+@app.route('/events/<int:event_id>', methods=["POST"])
 def view_event_details(event_id: int):
     event = models.Event.query.get(event_id)
+
+    if request.method == "POST":
+        rsvp_event(event_id)
+
     return render_template('event_details.html', event=event)
+
+def rsvp_event(event_id):
+    """Saves event to user profile when they RSVP."""
+
+    event_id = request.form.get("rsvp")
+    event = helpers.get_event_by_id(event_id)
+    user = helpers.get_user_info(session["user"])
+    user_events = helpers.get_future_user_events(user)
+    event_time = helpers.get_event_time(event_id)
+
+    if user:
+        if event in user_events:
+            flash("You have already RSVP'd to this event.")
+        else:
+            rsvp = models.EventAttendees(
+                event_id=event_id,
+                attendee_id=user,
+                rsvp_at=datetime.now()
+                )
+            db.session.add(rsvp)
+            db.session.commit()
+            flash("Event saved!")
+    else:
+        flash("You must be logged in to RSVP to events!")
+        return redirect("/login")
+
+    return redirect("/user-profile")
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -122,9 +159,12 @@ def logout():
 def show_profile(user_id):
     """Show a user's profile with their account info"""
     
-    user = helpers.get_user_info(user_id)
-
-    return render_template("user-profile.html", user=user)
+    user = helpers.get_user_info(user_id) 
+    attended_events = helpers.get_user_events(user_id)
+    
+    #TODO: implement current_user from flask_login extension to only make the logged in user's profile editable
+        # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
+    return render_template("user-profile.html", user=user, events=attended_events)
 
 
 @app.route("/all-users")
@@ -136,31 +176,5 @@ def show_all_users():
     
     return render_template("all-users.html", users=users)
 
-@app.route("/events/<id>", methods=["POST"])
-def rsvp_event(event_id):
-    """Saves event to user profile when they RSVP."""
-
-    event_id = request.form.get("rsvp")
-    user = helpers.get_user_info(session["user"])
-    user_events = helpers.get_user_events(user)
-
-    if user:
-        if event in user_events:
-            flash("You have already RSVP'd to this event.")
-        else:
-            rsvp_event = models.EventAttendees(
-                event_id=event_id,
-                attendee_id=user,
-                rsvp_at=
-                attended_at=True
-            )
-            db.session.add(rsvp_event)
-            db.session.commit()
-            flash("Event saved!")
-    else:
-        flash("You must be logged in to RSVP to events!")
-        return redirect("/login")
-
-    return redirect("/user-profile")
 
 
