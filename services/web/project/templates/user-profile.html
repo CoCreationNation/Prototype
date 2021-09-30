@@ -29,8 +29,12 @@ My Profile
     <h7><b>Zipcode: </b>{{user.zipcode}}</h7>
     <br>
     <h7><b>Profile Picture</b></h7>
-    <!--TODO: display user profile pictures here-->
-    <input required type="file" accept="image/*" name="image" id="file">
+
+    <!--Display user profile pictures here-->
+    <img class="img-thumbnail rounded-start" id="output" width="300" onerror="this.onerror=null; this.remove();">
+    <!--UPLOAD PROFILE PIC HERE-->
+    <input required type = "file" class="form-control-file" accept="image/*" name = "image" id = "file" onchange = "loadFile(event)" style="display": none;"></p>
+
 </div>
 
 <br>
@@ -41,7 +45,7 @@ My Profile
 
 <br>
 
-<!--WIP: include Events Attended in a second column?-->
+<!--List of Past Events Attended-->
 <div class="container"></div>
      <h4>Events Attended</h4>
      <br>
