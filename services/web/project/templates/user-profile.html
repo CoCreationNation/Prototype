@@ -65,7 +65,13 @@ My Profile
         {% endfor %}
 
     {% else %} 
-        <h7>This user hasn't attended any events yet.</h7>
+    
+       {% if user == user_in_session %} 
+            <h7>You haven't attended any events yet.</h7>
+        {% else %}
+            <h7>This user hasn't attended any events yet.</h7>
+        {% endif %}
+
      {% endif %}
 
 
