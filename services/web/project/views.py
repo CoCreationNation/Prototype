@@ -3,7 +3,7 @@ This file contains all the routes for the Flask app.
 """
 
 
-from Prototype.services.web.project.models 
+# from Prototype.services.web.project.models 
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
@@ -43,13 +43,21 @@ def create_event():
     return render_template('create_event.html', form=form)
 
 
-@app.route('/events')
+@app.route('/events', methods=["GET", "POST"])
 def view_events():
     events = helpers.get_future_events()
+    
+    for event in events:
+        event_id = event.id
+
+    if request.method == "POST":
+        rsvp_event(event_id)
+
+
     return render_template('events.html', events=events)
 
 
-@app.route('/events/<int:event_id>', methods=["POST"])
+@app.route('/events/<int:event_id>', methods=["GET", "POST"])
 def view_event_details(event_id: int):
     event = models.Event.query.get(event_id)
 
@@ -63,7 +71,7 @@ def rsvp_event(event_id):
 
     event_id = request.form.get("rsvp")
     event = helpers.get_event_by_id(event_id)
-    user = helpers.get_user_info(session["user"])
+    user = helpers.get_user_info(current_user)
     user_events = helpers.get_future_user_events(user)
     event_time = helpers.get_event_time(event_id)
 
