@@ -123,10 +123,11 @@ def show_profile(user_id):
     
     user = helpers.get_user_info(user_id) 
     attended_events = helpers.get_user_events(user_id)
+    user_in_session = current_user
     
     #TODO: implement current_user from flask_login extension to only make the logged in user's profile editable
         # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
-    return render_template("user-profile.html", user=user, events=attended_events)
+    return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
 
 
 @app.route("/all-users")
