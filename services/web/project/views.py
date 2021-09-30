@@ -4,6 +4,7 @@ This file contains all the routes for the Flask app.
 
 
 from Prototype.services.web.project.models 
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required, current_user
@@ -15,8 +16,6 @@ from project import db
 from project.models import User
 from project import models
 from project import helpers
-
-from datetime import datetime
 
 
 
@@ -44,7 +43,7 @@ def create_event():
     return render_template('create_event.html', form=form)
 
 
-@app.route('/events', methods=["POST"])
+@app.route('/events')
 def view_events():
     events = helpers.get_future_events()
     return render_template('events.html', events=events)
