@@ -40,7 +40,7 @@ My Profile
 </div>
 
 <br>
-<!--only allow user to edit profile if they are viewing their own page-->
+<!--Only allow user to edit profile if they are viewing their own page-->
 {% if user == user_in_session %}
     <div class="container">
         <button type="click" id="update-profile">Edit Profile</button>
@@ -53,7 +53,7 @@ My Profile
 <div class="container"></div>
      <h4>Events Attended</h4>
      <br>
-     {% if events %}   <!--if a user has attended an event(s)-->
+     {% if events %} 
         {% for event in events %} 
 
             <td><a href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></td>
@@ -63,6 +63,9 @@ My Profile
             <br>
 
         {% endfor %}
+
+    {% else %} 
+        <h7>This user hasn't attended any events yet.</h7>
      {% endif %}
 
 

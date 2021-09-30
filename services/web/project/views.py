@@ -129,6 +129,15 @@ def show_profile(user_id):
         # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
     return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
 
+@app.route("/user-profile/<user_id>/edit")
+@login_required
+def edit_profile(user_id): 
+    """Show edit profile page to signed in user"""
+
+    user = helpers.get_user_info(user_id)
+    form = forms.RegistrationForm()
+    
+
 
 @app.route("/all-users")
 @login_required
