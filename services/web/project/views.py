@@ -34,54 +34,76 @@ def create_event():
             title = form.title.data,
             description = form.description.data
         )
+        user_details = models.EventAttendees(
+            event_id = form.event_id.data,
+            attendee_email= form.attendee_email.data
+            
+        )
+        admin=models.EventAdmin(
+            user_id= form.user_id.data,
+        )
+
+        event_tag= models.EventTags(
+            tag= form.tag.data
+
+        )
+        about = models.EventEligibleZipcode(
+            zipcode= form.zipcode.data
+        )
+        
+        db.session.add(user_details)
+        db.session.add(admin)
+        db.session.add(about)
         db.session.add(event)
+        db.session.add(event_tag)
+        
         db.session.commit()
         print('Event successfully added to DB.')
         return redirect('/events')
     return render_template('create_event.html', form=form)
 
-@app.route('/events/event-froms', methods=['GET', 'POST'])
-def event_forms():
-    form = forms.UserEventForm()
-    print(form.data)
-    if form.validate_on_submit():
-        print('Adding data to event tables..')
-        user_details = models.EventAttendees(
-            id = form.id.data,
-            event_id = form.event_id.data,
-            attendee_id= form.attendee_id.data,
-            attended_at= form.attended_at.data 
+# @app.route('/events/event-froms', methods=['GET', 'POST'])
+# def event_forms():
+#     form = forms.UserEventForm()
+#     print(form.data)
+#     if form.validate_on_submit():
+#         print('Adding data to event tables..')
+#         user_details = models.EventAttendees(
+#             id = form.id.data,
+#             event_id = form.event_id.data,
+#             attendee_id= form.attendee_id.data,
+#             attended_at= form.attended_at.data 
             
-        )
-        db.session.add(user_details)
+#         )
+#         db.session.add(user_details)
 
-        about = models.EventEligibleZipcode(
-            zipcode= form.zipcode.data
-        )
-        db.session.add(about)
-        db.session.commit()
-        print('Information added sucessfully.')
-        return redirect('/events')
-    return render_template('event_forms.html', form=form)
+#         about = models.EventEligibleZipcode(
+#             zipcode= form.zipcode.data
+#         )
+#         db.session.add(about)
+#         db.session.commit()
+#         print('Information added sucessfully.')
+#         return redirect('/events')
+#     return render_template('event_forms.html', form=form)
 
-@app.route('/events/admin-forms', methods=['GET', 'POST'])
-def event_forms_admin():
-    form = forms.EventAdminForm()
-    print(form.data)
-    if form.validate_on_submit():
-        print('Adding data to event tables..')
-        admin_details = models.EventAdmin(
-            id = form.id.data,
-            event_id = form.event_id.data,
-            user_id= form.user_id.data,
-            admin_level =form.admin_level.data
+# @app.route('/events/admin-forms', methods=['GET', 'POST'])
+# def event_forms_admin():
+#     form = forms.EventAdminForm()
+#     print(form.data)
+#     if form.validate_on_submit():
+#         print('Adding data to event tables..')
+#         admin_details = models.EventAdmin(
+#             id = form.id.data,
+#             event_id = form.event_id.data,
+#             user_id= form.user_id.data,
+#             admin_level =form.admin_level.data
             
-        )
-        db.session.add(admin_details)
-        db.session.commit()
-        print('Information added sucessfully.')
-        return redirect('/events')
-    return render_template('admin_form.html', form=form)
+#         )
+#         db.session.add(admin_details)
+#         db.session.commit()
+#         print('Information added sucessfully.')
+#         return redirect('/events')
+#     return render_template('admin_form.html', form=form)
 
 @app.route('/events')
 def view_events():

@@ -15,7 +15,13 @@ class CreateEventForm(FlaskForm):
     description = TextAreaField('Description')
     start = DateTimeLocalField('Starting At', format='%Y-%m-%dT%H:%M')
     end = DateTimeLocalField('Ending At', format='%Y-%m-%dT%H:%M')
-
+    user_id = IntegerField('User ID', validators=[DataRequired()])
+    tag= StringField('Event Tag', validators=[DataRequired()])
+    event_id = IntegerField('Event ID', validators=[DataRequired()])
+    zipcode=TextAreaField('Zipcode', validators=[DataRequired()]) #textfield
+    attendee_email = StringField('Enter Your Email For Attending Event:',validators=[DataRequired()])
+    
+    
 
 class LoginForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired(), Email()])
@@ -29,17 +35,17 @@ class RegistrationForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     zip_code = StringField(label='Zip Code')
 
-class UserEventForm(FlaskForm):
-    id = IntegerField('ID')
-    event_id = IntegerField('Event ID', validators=[DataRequired()])
-    attendee_id = IntegerField('Attendeee ID', validators=[DataRequired()])
-    attended_at= BooleanField('Attended')
-    zipcode=IntegerField('Zipcode', validators=[DataRequired()])
+# class UserEventForm(FlaskForm):
+#     id = IntegerField('ID')
+#     event_id = IntegerField('Event ID', validators=[DataRequired()])
+#     attendee_id = IntegerField('Attendeee ID', validators=[DataRequired()])
+#     attended_at= BooleanField('Attended')
+#     zipcode=IntegerField('Zipcode', validators=[DataRequired()])
 
-class EventAdminForm(FlaskForm):
-    id = IntegerField('ID')
-    user_id = IntegerField('User ID', validators=[DataRequired()])
-    event_id = IntegerField('Event ID', validators=[DataRequired()])
-    #rsvp_at = StringField('Email for RSVP',validators=[DataRequired()]) 
-    admin_level = StringField('Admin Level')
+# class EventAdminForm(FlaskForm):
+#     id = IntegerField('ID')
+#     user_id = IntegerField('User ID', validators=[DataRequired()])
+#     event_id = IntegerField('Event ID', validators=[DataRequired()])
+#     #rsvp_at = StringField('Email for RSVP',validators=[DataRequired()]) 
+#     admin_level = StringField('Admin Level')
 

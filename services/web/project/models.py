@@ -100,6 +100,7 @@ class EventAttendees(db.Model):
     attendee_id =db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     rsvp_at =db.Column(db.String) # considered rsvp at host email id 
     attended_at = db.Column(db.DateTime(timezone=True))
+    attendee_email= db.Column(db.String(128), unique=True, nullable=False)
 
 #events
 class EventTags(db.Model):
