@@ -62,6 +62,19 @@ def seed_db():
         zip_code='90064'
     )
     db.session.add(user2)
+
+    user3_password = generate_password_hash(
+            'secret3',
+            method='pbkdf2:sha256',
+            salt_length=8
+        )
+    user3 = models.User(
+        username="not_another_user",
+        password=user3_password,
+        email="not_another_user@example.com",
+        zip_code='90065'
+    )
+    db.session.add(user3)
     db.session.commit()
 
 

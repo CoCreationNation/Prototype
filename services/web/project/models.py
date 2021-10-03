@@ -36,13 +36,13 @@ class User(UserMixin, db.Model):
                    nullable=False)
     password = db.Column(db.String, unique=True, nullable=False)  # need to incorporate password_hash algo somehow
     user_type = db.Column(db.String)
-    is_superuser = db.Column(db.Boolean(), default=False)
+    is_superuser = db.Column(db.Boolean(), server_default='f')
     username = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=True)
     first_name = db.Column(db.String, nullable=True)
     pronouns = db.Column(db.Enum(Pronouns))
     email = db.Column(db.String(128), unique=True, nullable=False)
-    email_confirmed = db.Column(db.Boolean(), default=False)
+    email_confirmed = db.Column(db.Boolean(), server_default='f')
     address_1 = db.Column(db.String)
     address_2 = db.Column(db.String)
     city = db.Column(db.String)
@@ -60,68 +60,76 @@ class User(UserMixin, db.Model):
 class Event(db.Model):
     __tablename__ = "events"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   nullable=False)
     start_utc = db.Column(db.DateTime(timezone=True), nullable=False)
     end_utc = db.Column(db.DateTime(timezone=True), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    restrict_by_zipcode = db.Column(db.Boolean(), nullable=False, server_default='f')
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=sql.func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=sql.func.now(), nullable=True)
     deleted_at = db.Column(db.DateTime(timezone=True), nullable=True)
 
-    #users table and events table
-
-class EventEligibility(db.Model):
-    __tablename__ = "event_eligible_attendees"
-
-    id = db.Column(db.Integer, primary_key=True)
-    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-#users table and events table
 
 class EventAdmin(db.Model):
     __tablename__ = "event_admins"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   nullable=False)
     event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     admin_level = db.Column(db.String, nullable= True) # levels are considered as "level one, two etc"
 
 
-#users table and events
-
 class EventAttendees(db.Model):
     __tablename__ = "event_attendees"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   nullable=False)
     event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     attendee_id =db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    rsvp_at =db.Column(db.String) # considered rsvp at host email id 
+    rsvp_at =db.Column(db.DateTime(timezone=True))
     attended_at = db.Column(db.DateTime(timezone=True))
-    attendee_email= db.Column(db.String(128), unique=True, nullable=False)
 
-#events
+
 class EventTags(db.Model):
     __tablename__ = "event_tags"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   nullable=False)
     event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     tag =db.Column(db.String, nullable= False)
+
 
 class EventEligibleZipcode(db.Model):
     __tablename__ = "event_elogible_zipcodes"
 
-    eligible_zipcodes = db.Column(db.Integer, primary_key=True)
-    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
-    zipcode =db.Column(db.Integer, nullable= False)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    # TODO: add constraint to limit zip code to 5 characters
+    zipcode = db.Column(db.String, nullable= False)
 
-# for contact us page
+
 class ContactUs(db.Model):
     __tablename__ = "contact_us"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True,
+                   nullable=False)
     message = db.Column(db.String, nullable=False)
 
 
