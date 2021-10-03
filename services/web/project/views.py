@@ -3,6 +3,7 @@ This file contains all the routes for the Flask app.
 """
 
 
+from typing_extensions import Required
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required, current_user
@@ -129,21 +130,21 @@ def show_profile(user_id):
         # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
     return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
 
-@app.route("/edit-profile", methods=["GET", "POST"])
-@login_required
-def edit_profile(user_id): 
-    """Gather and/or save edited info to signed in user"""
+# @app.route("/edit-profile", methods=["GET", "POST"])
+# @login_required
+# def edit_profile(user_id): 
+#     """Gather and/or save edited info to signed in user"""
 
-    user = helpers.get_user_info(user_id)
-    form = forms.RegistrationForm()
+#     user = helpers.get_user_info(user_id)
+#     form = forms.RegistrationForm()
 
-    if request.method == "POST": #or if "Update Profile" button is clicked
-        #grab input from form fields and update user obj in db
-    #else: 
-        #redirect to user-profile 
+#     if request.method == "POST": #or if "Update Profile" button is clicked
+#         #grab input from form fields and update user obj in db
+#     #else: 
+#         #redirect to user-profile 
 
 
-    return render_template("edit-profile.html", user=user, form=form)
+#     return render_template("edit-profile.html", user=user, form=form)
 
 
 
@@ -155,3 +156,11 @@ def show_all_users():
     users = User.query.all()
     
     return render_template("all-users.html", users=users)
+
+@app.route("/test-route")
+@login-required
+def test_route(): 
+    
+    form = forms.TestForm()
+
+    return render_template("test-template.html", form=form)

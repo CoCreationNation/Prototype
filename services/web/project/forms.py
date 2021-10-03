@@ -27,3 +27,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8)])
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     zip_code = StringField(label='Zip Code')
+
+class TestForm(FlaskForm): 
+    username = StringField(label='User Name', validators=[DataRequired()])
+    submit = SubmitField(label="Log In")
