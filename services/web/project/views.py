@@ -129,7 +129,7 @@ def show_profile(user_id):
         # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
     return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
 
-@app.route("/user-profile/<user_id>/edit", methods=["GET", "POST"])
+@app.route("/edit-profile", methods=["GET", "POST"])
 @login_required
 def edit_profile(user_id): 
     """Gather and/or save edited info to signed in user"""
@@ -137,9 +137,11 @@ def edit_profile(user_id):
     user = helpers.get_user_info(user_id)
     form = forms.RegistrationForm()
 
+    if request.method == "POST": #or if "Update Profile" button is clicked
+        #grab input from form fields and update user obj in db
+    #else: 
+        #redirect to user-profile 
 
-
-    #show user all the form fields to change their info
 
     return render_template("edit-profile.html", user=user, form=form)
 
