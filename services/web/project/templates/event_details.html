@@ -8,9 +8,11 @@
 <div>Start: {{ event.start_utc }}</div>
 <div>End: {{ event.end_utc }}</div>
 <div>
-<form action="/event/{{ event.id }}" method="POST">
-    <input type="hidden" name="rsvp" value="{{ event.id }}">
-    <button id="rsvp">RSVP</button>
+<form action="{{ url_for('view_event_details', event_id=event.id) }}" method="POST" id="rsvp-form">
+    {{ form.csrf_token }}
+    {{ form.submit() }}
+    <input type="hidden" name="rsvp" value="{{ event.id }}"/>
+    <!-- <button type="submit" id="rsvp" form="rsvp-form">RSVP</button> -->
 </form>
 </div>
 {% endblock %}

@@ -2,8 +2,6 @@
 This file contains all the routes for the Flask app.
 """
 
-
-# from Prototype.services.web.project.models 
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
@@ -16,7 +14,6 @@ from project import db
 from project.models import User
 from project import models
 from project import helpers
-
 
 
 @app.route('/')
@@ -46,52 +43,48 @@ def create_event():
 @app.route('/events', methods=["GET", "POST"])
 def view_events():
     events = helpers.get_future_events()
-    
-    for event in events:
-        event_id = event.id
-
-    if request.method == "POST":
-        rsvp_event(event_id)
-
 
     return render_template('events.html', events=events)
 
 
-@app.route('/events/<int:event_id>', methods=["GET", "POST"])
+@app.route('/events/<int:event_id>')
 def view_event_details(event_id: int):
     event = models.Event.query.get(event_id)
 
-    if request.method == "POST":
-        rsvp_event(event_id)
+    # if request.method == "POST":
+    #     rsvp_event(event)
 
     return render_template('event_details.html', event=event)
 
+@app.route('/events/<int:event_id>', methods=["GET", "POST"])
 def rsvp_event(event_id):
     """Saves event to user profile when they RSVP."""
+    form = forms.RSVPForm()
 
     event_id = request.form.get("rsvp")
     event = helpers.get_event_by_id(event_id)
-    user = helpers.get_user_info(current_user)
-    user_events = helpers.get_future_user_events(user)
-    event_time = helpers.get_event_time(event_id)
+    user = current_user
+    user_id = current_user.get_id()
+    user_events = helpers.get_future_user_events(user_id)
 
-    if user:
-        if event in user_events:
-            flash("You have already RSVP'd to this event.")
+    if form.validate_on_submit():
+        if user:
+            if event in user_events:
+                flash("You have already RSVP'd to this event.")
+            else:
+                rsvp = models.EventAttendees(
+                    event_id=event_id,
+                    attendee_id=user_id,
+                    rsvp_at=datetime.now()
+                    )
+                db.session.add(rsvp)
+                db.session.commit()
+                flash("Event saved!")
         else:
-            rsvp = models.EventAttendees(
-                event_id=event_id,
-                attendee_id=user,
-                rsvp_at=datetime.now()
-                )
-            db.session.add(rsvp)
-            db.session.commit()
-            flash("Event saved!")
-    else:
-        flash("You must be logged in to RSVP to events!")
-        return redirect("/login")
+            flash("You must be logged in to RSVP to events!")
+            return redirect("/login")
 
-    return redirect("/user-profile")
+    return render_template("/events.html", form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])

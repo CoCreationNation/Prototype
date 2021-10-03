@@ -48,9 +48,9 @@ def get_future_user_events(user_id):
     now = datetime.now()
     future_events = []
 
-    user_future_events = models.EventAttendees.query.filter(models.EventAttendees.attendee_id == user_id, models.EventAttendees.attended_at > now)
+    user_events = models.EventAttendees.query.filter(models.EventAttendees.attendee_id == user_id)
 
-    for record in user_future_events:
+    for record in user_events:
         event = models.Event.query.filter(models.Event.id == record.event_id).first()
         if (event.start_utc) > now:
             future_events.append(event)
