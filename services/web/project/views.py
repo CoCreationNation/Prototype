@@ -157,10 +157,10 @@ def show_all_users():
     
     return render_template("all-users.html", users=users)
 
-@app.route("/test-route")
-@login-required
-def test_route(): 
+# @app.route("/test-route")
+# @login-required
+# def test_route(): 
     
-    form = forms.TestForm()
+#     form = forms.TestForm()
 
-    return render_template("test-template.html", form=form)
+#     return render_template("test-template.html", form=form)

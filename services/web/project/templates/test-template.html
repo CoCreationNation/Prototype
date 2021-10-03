@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Test
+{% endblock %}
+
+{% block content %}
+<h1>here is our test form</h1>
+
+<form method="POST" action="{{ url_for('test-route') }}">
+    {{ form.username.label}} {{ form.username }}
+</form>
+
+{% endblock %}
