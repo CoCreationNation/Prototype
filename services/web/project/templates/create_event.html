@@ -6,10 +6,15 @@
 <h2>Create Event</h2>
 <form method="POST" action="{{ url_for('create_event') }}">
     {{ form.csrf_token }}
-    {{ form.title.label }} {{ form.title(size=20) }}
-    {{ form.description.label }} {{ form.description() }}
-    {{ form.start.label }} {{ form.start() }}
-    {{ form.end.label }} {{ form.end() }}
-    <input type="submit" value="Submit">
+    {{ form.title.label }} {{ form.title(size=20) }}<br>
+    {{ form.description.label }} {{ form.description() }}<br>
+    {{ form.start.label }} {{ form.start() }}<br>
+    {{ form.end.label }} {{ form.end() }}<br>
+    {{ form.tags.label }} {{ form.tags() }}<br>
+    {{ form.attendee_emails.label }} {{ form.attendee_emails() }}<br>
+    {{ form.restrict_attendees.label }} {{ form.restrict_attendees() }}<br>
+    {{ form.zipcodes.label }} {{ form.zipcodes() }}<br>
+
+    <input type="submit" value="Create_Event">
 </form>
 {% endblock %}

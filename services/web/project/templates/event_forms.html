@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Forms{% endblock %}
+
+{% block content %}
+<h2>Event form for user</h2>
+<form method="POST" action="{{ url_for('event_forms') }}">
+    {{ form.csrf_token }}
+    {{ form.id.label }} {{ form.id() }}
+    {{ form.event_id.label }} {{ form.event_id() }}
+    {{ form.attendee_id.label }} {{ form.attendee_id() }}
+    {{ form.attended_at.label }} {{ form.attended_at() }}
+    {{ form.zipcode.label }} {{ form.zipcode() }}
+
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
