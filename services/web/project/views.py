@@ -126,28 +126,33 @@ def show_profile(user_id):
     attended_events = helpers.get_user_events(user_id)
     user_in_session = current_user
     
-    #TODO: implement current_user from flask_login extension to only make the logged in user's profile editable
-        # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
     return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
 
-@app.route('/edit-profile/', methods=["GET", "POST"])
+@app.route('/edit-profile/<user_id>', methods=["GET", "POST"])
 @login_required
-def edit_profile(): 
+def edit_profile(user_id): 
     """Gather and/or save edited info to signed in user"""
 
-    #user_in_session = current_user #get the user who's editing their page
+    user = helpers.get_user_info(user_id)
+    attended_events = helpers.get_user_events(user_id)
+    user_in_session = current_user
 
-    #form = forms.RegistrationForm() #take in updated info using registration form
-    #first_name = form.first_name.data 
+    form = forms.RegistrationForm() #take in updated info using registration form
+    first_name = form.first_name.data 
+    last_name = form.last_name.data
+    # username = form.username.data
+    # zip_code = form.zip_code.data
 
 
-    #if request.method == "POST": #or if "Update Profile" button is clicked
-        #grab input from form fields and update user obj in db
-    #else: 
-        #redirect to user-profile 
 
+    #for if "Update Profile" button is clicked
+    if request.method == "POST": 
+        user = helpers.update_user_details(first_name, last_name) #TODO: add helper func
+    
+    #TODO: check duplicate username if we update that
+    return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
+    
 
-    return render_template("edit-profile.html")
 
 
 

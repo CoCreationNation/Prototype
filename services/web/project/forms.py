@@ -28,7 +28,7 @@ class RegistrationForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     zip_code = StringField(label='Zip Code')
     first_name = StringField(label='First Name', validators=[Datarequired()])
-
+    last_name = StringField(label='Last Name',validators=[Datarequired()])
 
 # class TestForm(FlaskForm): 
 #     username = StringField(label='User Name', validators=[DataRequired()])
