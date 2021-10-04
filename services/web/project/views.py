@@ -117,7 +117,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route("/user-profile/<user_id>")
+@app.route('/user-profile/<user_id>')
 @login_required
 def show_profile(user_id):
     """Show a user's profile with their account info"""
@@ -130,15 +130,15 @@ def show_profile(user_id):
         # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
     return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
 
-@app.route("/edit-profile/", methods=["GET", "POST"])
+@app.route('/edit-profile/', methods=["GET", "POST"])
 @login_required
 def edit_profile(): 
     """Gather and/or save edited info to signed in user"""
 
     #user_in_session = current_user #get the user who's editing their page
 
-    form = forms.RegistrationForm() #take in updated info using registration form
-    first_name = form.first_name.data 
+    #form = forms.RegistrationForm() #take in updated info using registration form
+    #first_name = form.first_name.data 
 
 
     #if request.method == "POST": #or if "Update Profile" button is clicked
@@ -147,7 +147,7 @@ def edit_profile():
         #redirect to user-profile 
 
 
-    return render_template("edit-profile.html", form=form)
+    return render_template("edit-profile.html")
 
 
 
