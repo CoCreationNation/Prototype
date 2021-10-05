@@ -16,25 +16,63 @@ My Profile
 <br>
 
 <div class="container">
-    <h4>Edit Profile</h4>
+    <h3>Update Profile</h3>
+
+    <br>
 
     <form method="POST" action="/edit-profile/{{user.id}}"> 
+        {{ form.csrf_token }}
+    
+        <label>First Name</label>
+        {{ form.first_name(placeholder= user.first_name ) }}
         
-        <div>
-            <label>First Name</label>
-            {{ form.first_name(placeholder="First Name") }}
-        </div>
+        <br>
+        <br>
+
+        <label>Last Name</label>
+        {{ form.last_name(placeholder= user.last_name ) }}
+
+        <br>
+        <br>
+
+        <!--TODO: Add pronouns dropdown-->
+
+        <br>
+        <br>
+
+        <label>Address</label>
+        {{ form.address_1(placeholder= user.address_1 ) }}
+
+        <br>
+        <br>
+
+        <label>City</label>
+        {{ form.city(placeholder= user.city ) }}
+
+        <br>
+        <br>
+
+       <label>State</label>
+       {{ form.state(placeholder= user.state ) }}
+ 
+       <br>
+       <br>
+
+       <label>Zipcode</label>
+       {{ form.zip_code(placeholder= user.zip_code ) }}
+ 
+       <br>
+       <br>
+
         
-        <br>
-        <h7><b>Pronouns: </b>{{user.pronouns}}</h7>
-        <br>
-        <h7><b>Email: </b>{{user.email}}</h7>
-        <br>
-        <h7><b>Phone: </b>{{user.phone_number}}</h7>
-        <br>
-        <h7><b>Zipcode: </b>{{user.zipcode}}</h7>
-        <br>
-        <h7><b>Profile Picture</b></h7>
+       <label>Phone Number</label>
+       {{ form.phone_number(placeholder= user.phone_number ) }}
+
+       <br>
+       <br>
+
+
+
 
     
         <!--UPLOAD PROFILE PIC HERE-->

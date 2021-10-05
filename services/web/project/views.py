@@ -133,22 +133,28 @@ def show_profile(user_id):
 def edit_profile(user_id): 
     """Gather and/or save edited info to signed in user"""
 
-    user = helpers.get_user_info(user_id)
-    attended_events = helpers.get_user_events(user_id)
-    user_in_session = current_user
+  
+    #attended_events = helpers.get_user_events(user_id)
+    #user_in_session = current_user
 
     form = forms.RegistrationForm() #take in updated info using registration form
     first_name = form.first_name.data 
     last_name = form.last_name.data
-    # username = form.username.data
-    # zip_code = form.zip_code.data
+    #pronouns = form.pronouns.data
+    address_1 = form.address_1.data
+    city = form.city.data
+    state = form.state.data
+    zip_code = form.zip_code.data
+    phone_number = form.phone_number.data
 
 
 
-    #for if "Update Profile" button is clicked
     if request.method == "POST": 
-        user = helpers.update_user_details(first_name, last_name) #TODO: add helper func
-    
+        user = helpers.update_user_details(user_id, first_name, last_name,
+                                            address_1, city, state, zip_code, phone_number)
+        return redirect("/user-profile/" + str(user_id))
+
+    user = helpers.get_user_info(user_id)
     #TODO: check duplicate username if we update that
     return render_template("edit-profile.html",  user=user, form=form)
     #return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)

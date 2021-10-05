@@ -27,8 +27,14 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8)])
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     zip_code = StringField(label='Zip Code')
-    first_name = StringField(label='First Name', validators=[DataRequired()])
-    last_name = StringField(label='Last Name',validators=[DataRequired()])
+    first_name = StringField(label='First Name')
+    last_name = StringField(label='Last Name')
+   # pronouns = SelectField(label="Pronouns", choices=[('she/her', 'she/her')])
+    address_1 = TextAreaField(label='Address')
+    city = StringField(label='City')
+    state = StringField(label='State')
+    phone_number = StringField(label='Phone Number')
+
 
 # class TestForm(FlaskForm): 
 #     username = StringField(label='User Name', validators=[DataRequired()])

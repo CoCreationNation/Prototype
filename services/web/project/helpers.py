@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from project import models
+from project import models, db
 
 def get_future_events() -> list:
     now = datetime.now()
@@ -31,15 +31,20 @@ def get_user_events(user_id):
     #TODO: order events by date
     return user_past_events
 
-def update_user_details(user_id, first_name, last_name): 
+def update_user_details(user_id, first_name, last_name, address_1, city, state, zip_code, phone_number): 
     """Update a user's details"""
 
     user = get_user_info(user_id)
 
     models.User.query.filter(models.User.id == user_id).update(
         {
-            "last_name": last_name,
             "first_name": first_name,
+            "last_name": last_name,
+            "address_1": address_1,
+            "city": city,
+            "state": state,
+            "zip_code": zip_code,
+            "phone_number": phone_number
         }
     )
     
