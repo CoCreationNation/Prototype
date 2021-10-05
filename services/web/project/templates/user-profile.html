@@ -16,7 +16,7 @@ My Profile
 <br>
 
 <div class="container">
-    <form action="/edit-profile">
+    <form action="/edit-profile/{{user.id}}">
 
         <h4>Personal Information</h4>
         <br>
@@ -34,7 +34,8 @@ My Profile
 
     
         <!--TODO: ADD ABILITY TO UPLOAD PROFILE PIC AND HOST ON AWS S3-->
-        <input required type = "file" class="form-control-file" accept="image/*" name = "image" id = "file" onchange = "loadFile(event)" style="display": none;"></p>
+        <!--TODO: make required type-->
+        <input type = "file" class="form-control-file" accept="image/*" name = "image" id = "file" onchange = "loadFile(event)" style="display": none;"></p>
         
         <!--Display user profile pictures here-->
         <img class="img-thumbnail rounded-start" id="output" width="300" onerror="this.onerror=null; this.remove();">
