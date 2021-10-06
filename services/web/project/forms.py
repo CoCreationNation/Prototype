@@ -29,5 +29,4 @@ class RegistrationForm(FlaskForm):
     zip_code = StringField(label='Zip Code')
 
 class RSVPForm(FlaskForm):
-    name = StringField('Which actor is your favorite?', validators=[DataRequired()])
     submit = SubmitField(label='RSVP')

@@ -20,8 +20,7 @@
         <td>{{ event.end_utc }}</td>
         <td>
         <form action="{{ url_for('view_event_details', event_id=event.id) }}" method="POST">
-            {{ form.csrf_token }}
-            {{ form.submit() }}
+            {{ csrf_input }}
             <input type="hidden" name="rsvp" value="{{ event.id }}"/>
             <button type="submit" id="rsvp">RSVP</button>
         </form>
