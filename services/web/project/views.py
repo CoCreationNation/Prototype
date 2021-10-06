@@ -43,34 +43,31 @@ def create_event():
 @app.route('/events', methods=["GET", "POST"])
 def view_events():
     events = helpers.get_future_events()
-    # form = forms.RSVPForm()
+    form = forms.RSVPForm()
 
-    # if request.method == "POST":
-    #     event_id = request.form.get("rsvp")
-    #     event = helpers.get_event_by_id(event_id)
-    #     user = current_user
-    #     user_id = current_user.get_id()
-    #     user_events = helpers.get_future_user_events(user_id)
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            flash('You must be logged in to RSVP.')
+        else:
+            flash("You are now RSVP'd to this event.")
+            event_id = request.form.get("rsvp")
+            event = helpers.get_event_by_id(event_id)
 
-    #     if form.validate_on_submit():
-    #         if user:
-    #             if event in user_events:
-    #                 flash("You have already RSVP'd to this event.")
-    #             else:
-    #                 rsvp = models.EventAttendees(
-    #                     event_id=event_id,
-    #                     attendee_id=user_id,
-    #                     rsvp_at=datetime.now()
-    #                     )
-    #                 db.session.add(rsvp)
-    #                 db.session.commit()
-    #                 flash("Event saved!")
-    #         else:
-    #             flash("You must be logged in to RSVP to events!")
-    #             return redirect("/login")
-    #     return render_template('events.html', form=form)       
-        
-    return render_template('events.html', events=events)
+            # Checking if user has already RSVP'd
+            user_id = current_user.get_id()
+            future_events = helpers.get_future_user_events(user_id)
+            if event in future_events:
+                flash("You have already RSVD'd to this event.")
+            else:
+            # Add RSVP if they have not already RSVP'd
+                rsvp = models.EventAttendees(
+                                event_id=event_id,
+                                attendee_id=user_id,
+                                rsvp_at=datetime.now()
+                                )
+                db.session.add(rsvp)
+                db.session.commit()
+    return render_template('events.html', events=events, form=form)
 
 
 @app.route('/events/<int:event_id>', methods=["GET", "POST"])

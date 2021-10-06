@@ -3,6 +3,13 @@
 {% block title %}Events{% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+{% endwith %}
 <h2>Upcoming Events</h2>
 <table>
     <tr>
@@ -19,8 +26,8 @@
         <td>{{ event.start_utc }}</td>
         <td>{{ event.end_utc }}</td>
         <td>
-        <form action="{{ url_for('view_event_details', event_id=event.id) }}" method="POST">
-            {{ csrf_input }}
+        <form action="{{ url_for('view_events') }}" method="POST">
+            {{ form.csrf_token }}
             <input type="hidden" name="rsvp" value="{{ event.id }}"/>
             <button type="submit" id="rsvp">RSVP</button>
         </form>

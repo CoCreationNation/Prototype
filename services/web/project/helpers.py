@@ -42,7 +42,7 @@ def get_user_events(user_id):
     #TODO: order events by date
     return user_past_events
 
-def get_future_user_events(user_id):
+def get_future_user_events(user_id: int) -> list:
     """Retrieve list of upcoming events a user has RSVP'd to."""
 
     now = datetime.now()
@@ -52,7 +52,8 @@ def get_future_user_events(user_id):
 
     for record in user_events:
         event = models.Event.query.filter(models.Event.id == record.event_id).first()
-        if (event.start_utc) > now:
+        print(f'start type: {type(event.start_utc)}')
+        if (event.start_utc.replace(tzinfo=None)) > now:
             future_events.append(event)
     
     return future_events
