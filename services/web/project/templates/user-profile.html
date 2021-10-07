@@ -18,22 +18,37 @@ My Profile
 <div class="container">
     <form action="/edit-profile/{{user.id}}">
 
-        <h4>Personal Information</h4>
+        <h3>Personal Information</h3>
         <br>
+
         <h7><b>Name: </b>{{user.first_name}} {{user.last_name}}</h7>
         <br>
+        <br>
+
         <h7><b>Pronouns: </b>{{user.pronouns.value}}</h7>
         <br>
+        <br>
+
         <h7><b>Email: </b>{{user.email}}</h7>
         <br>
+        <br>
+
         <h7><b>Phone: </b>{{user.phone_number}}</h7>
         <br>
+        <br>
+
         <h7><b>City: </b>{{user.city}}</h7>
         <br>
+        <br>
+
         <h7><b>Zipcode: </b>{{user.zip_code}}</h7>
         <br>
+        <br>
+
         <h7><b>State: </b>{{user.state}}</h7>
         <br>
+        <br>
+        
         <h7><b>Profile Picture</b></h7>
         <br>
 
@@ -46,18 +61,14 @@ My Profile
         <img class="img-thumbnail rounded-start" id="output" width="300" onerror="this.onerror=null; this.remove();">
 
 </div>
-
 <br>
-
     <!--Only allow user to edit profile if they are viewing their own page-->
     {% if user == user_in_session %}
         <div class="container">
             <button type="submit" value = "Update Profile" id="edit">Update Profile</button>
         </div>
     {% endif %}
-
 </form>
-
 
 <br>
 
@@ -85,8 +96,6 @@ My Profile
         {% endif %}
 
      {% endif %}
-
-
+     
 </div>
-
 {% endblock %}

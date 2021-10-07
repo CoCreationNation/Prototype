@@ -131,9 +131,9 @@ def show_profile(user_id):
 @app.route('/edit-profile/<user_id>', methods=["GET", "POST"])
 @login_required
 def edit_profile(user_id): 
-    """Gather and/or save edited info to signed in user"""
+    """Gather and save edited info to signed in user"""
 
-    form = forms.RegistrationForm() #take in updated info using registration form
+    form = forms.RegistrationForm()
 
     first_name = form.first_name.data 
     last_name = form.last_name.data
@@ -150,13 +150,10 @@ def edit_profile(user_id):
         return redirect("/user-profile/" + str(user_id))
 
     user = helpers.get_user_info(user_id)
-    #TODO: check duplicate username if we update that
-    return render_template("edit-profile.html",  user=user, form=form)
-    #return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
     
+    #TODO: Allow user to update their email/username(?) and add check for dupe usernames/email validation
 
-
-
+    return render_template("edit-profile.html",  user=user, form=form)
 
 @app.route("/all-users")
 @login_required
@@ -166,11 +163,3 @@ def show_all_users():
     users = User.query.all()
     
     return render_template("all-users.html", users=users)
-
-# @app.route("/test-route")
-# @login-required
-# def test_route(): 
-    
-#     form = forms.TestForm()
-
-#     return render_template("test-template.html", form=form)

@@ -9,7 +9,7 @@ def get_future_events() -> list:
 
 def get_user_info(user_id):
     """Retrieve user using id"""
-    
+   
     return models.User.query.get(user_id)
 
 def get_user_events(user_id): 
@@ -36,14 +36,9 @@ def update_user_details(user_id, first_name, last_name, pronouns, address_1, cit
 
     user = get_user_info(user_id)
     
-    #handle pronouns input
-    print("-----we're in update_user_details----")
-    print(pronouns)
-    print(type(pronouns))
-
-    if zip_code: #zip_code is not nullable field in models.py
+    if zip_code: #zip_code is not a nullable field in models.py
+        
         zip_code = int(float(zip_code))
-        print(f'zipcode type is = {type(zip_code)}')
 
         models.User.query.filter(models.User.id == user_id).update(
             {
