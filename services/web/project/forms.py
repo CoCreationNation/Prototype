@@ -4,7 +4,7 @@ This file is used to initiate all forms
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, PasswordField, SubmitField
+from wtforms import StringField, TextAreaField, PasswordField, SubmitField, SelectField
 from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import DataRequired, Email, Length
 
@@ -29,13 +29,12 @@ class RegistrationForm(FlaskForm):
     zip_code = StringField(label='Zip Code')
     first_name = StringField(label='First Name')
     last_name = StringField(label='Last Name')
-   # pronouns = SelectField(label="Pronouns", choices=[('she/her', 'she/her')])
+    pronouns = SelectField(label="Pronouns", 
+                            choices=[('She/Her', 'She/Her'), 
+                            ('He/Him', 'He/Him'), ('They/Them', 'They/Them'), 
+                            ('Other', 'Other')])
     address_1 = TextAreaField(label='Address')
     city = StringField(label='City')
     state = StringField(label='State')
     phone_number = StringField(label='Phone Number')
 
-
-# class TestForm(FlaskForm): 
-#     username = StringField(label='User Name', validators=[DataRequired()])
-#     submit = SubmitField(label="Log In")

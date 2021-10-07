@@ -35,18 +35,35 @@ def update_user_details(user_id, first_name, last_name, address_1, city, state, 
     """Update a user's details"""
 
     user = get_user_info(user_id)
+    
 
-    models.User.query.filter(models.User.id == user_id).update(
-        {
-            "first_name": first_name,
-            "last_name": last_name,
-            "address_1": address_1,
-            "city": city,
-            "state": state,
-            "zip_code": zip_code,
-            "phone_number": phone_number
-        }
-    )
+    if zip_code: 
+        zip_code = int(float(zip_code))
+        print(f'zipcode type is = {type(zip_code)}')
+
+        models.User.query.filter(models.User.id == user_id).update(
+            {
+                "first_name": first_name,
+                "last_name": last_name,
+                "address_1": address_1,
+                "city": city,
+                "state": state,
+                "zip_code": zip_code,
+                "phone_number": phone_number
+            }
+        )
+    else:
+        models.User.query.filter(models.User.id == user_id).update(
+            {
+                "first_name": first_name,
+                "last_name": last_name,
+                "address_1": address_1,
+                "city": city,
+                "state": state,
+                "phone_number": phone_number
+            }
+        )
+
     
     db.session.commit() 
 
