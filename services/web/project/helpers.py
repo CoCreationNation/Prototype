@@ -31,13 +31,17 @@ def get_user_events(user_id):
     #TODO: order events by date
     return user_past_events
 
-def update_user_details(user_id, first_name, last_name, address_1, city, state, zip_code, phone_number): 
+def update_user_details(user_id, first_name, last_name, pronouns, address_1, city, state, zip_code, phone_number): 
     """Update a user's details"""
 
     user = get_user_info(user_id)
     
+    #handle pronouns input
+    print("-----we're in update_user_details----")
+    print(pronouns)
+    print(type(pronouns))
 
-    if zip_code: 
+    if zip_code: #zip_code is not nullable field in models.py
         zip_code = int(float(zip_code))
         print(f'zipcode type is = {type(zip_code)}')
 
@@ -45,6 +49,7 @@ def update_user_details(user_id, first_name, last_name, address_1, city, state, 
             {
                 "first_name": first_name,
                 "last_name": last_name,
+                "pronouns": pronouns,
                 "address_1": address_1,
                 "city": city,
                 "state": state,
@@ -57,6 +62,7 @@ def update_user_details(user_id, first_name, last_name, address_1, city, state, 
             {
                 "first_name": first_name,
                 "last_name": last_name,
+                "pronouns": pronouns,
                 "address_1": address_1,
                 "city": city,
                 "state": state,
