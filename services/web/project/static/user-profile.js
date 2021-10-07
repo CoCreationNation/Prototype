@@ -1,6 +1,6 @@
 'use strict';
 
-// LOAD UPLOADED PIC ON PROFILE PAGE
+// TODO: LOAD UPLOADED PIC ON PROFILE PAGE
 
 // alert("create-event.js is connected!");
 
