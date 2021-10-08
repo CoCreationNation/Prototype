@@ -3,6 +3,7 @@ This file contains all the routes for the Flask app.
 """
 
 from datetime import datetime
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required, current_user
@@ -10,8 +11,6 @@ from flask_login import login_user, logout_user, login_required, current_user
 from project import app
 from project import db
 from project import forms
-from project import db
-from project.models import User
 from project import models
 from project import helpers
 
@@ -22,6 +21,7 @@ def index():
 
 
 @app.route('/events/create-event', methods=['GET', 'POST'])
+@login_required
 def create_event():
     form = forms.CreateEventForm()
     print(form.data)
@@ -31,10 +31,77 @@ def create_event():
             start_utc = form.start.data,
             end_utc = form.end.data,
             title = form.title.data,
-            description = form.description.data
+            description = form.description.data,
+            restrict_by_zipcode = form.restrict_attendees.data
         )
         db.session.add(event)
         db.session.commit()
+
+        event_id = event.id
+        user_id = current_user.get_id()
+
+        # Add event creator to attendee list
+        attendee = models.EventAttendees(
+            event_id = event_id,
+            attendee_id = user_id,
+            rsvp_at = datetime.now()
+        )
+        db.session.add(attendee)
+        db.session.commit()
+
+        # make event creator an admin for event
+        admin = models.EventAdmin(
+            user_id = user_id,
+            event_id = event_id
+        )
+        db.session.add(admin)
+        db.session.commit()
+
+        # handling tags as comma-separated string
+        tags_string: str = form.tags.data
+        tags_list: list = tags_string.split(',')
+        for tag in tags_list:
+            clean_tag = tag.strip()
+            event_tag= models.EventTags(
+                tag = clean_tag,
+                event_id = event_id
+            )
+            db.session.add(event_tag)
+            db.session.commit()
+        
+        # add event attendees from email list
+        attendees_string = form.attendee_emails.data
+        attendees_list: list = attendees_string.split(',')
+        for email in attendees_list:
+            clean_email = email.strip()
+            invite_user = models.User.query.filter(models.User.email == clean_email).first()
+            # TODO: notify user if email doesn't match email from user in our DB
+            if invite_user:
+                invite_attendee = models.EventAttendees(
+                    event_id = event_id,
+                    attendee_id = invite_user.id,
+                    rsvp_at = datetime.now()
+                )
+                db.session.add(invite_attendee)
+                db.session.commit()
+
+        # handle zip code restrictions
+        if form.restrict_attendees.data:
+            zipcode_string = form.zipcodes.data
+            zipcode_list = zipcode_string.split(',')
+            for zipcode in zipcode_list:
+                clean_zipcode = zipcode.strip()
+                if len(clean_zipcode) == 5:
+                    # TODO: notify user if zip code is not valid
+                    eligible_zipcode = models.EventEligibleZipcode(
+                        zipcode = clean_zipcode,
+                        event_id = event_id
+                    )
+                    db.session.add(eligible_zipcode)
+                    db.session.commit()
+        
+        
+        
         print('Event successfully added to DB.')
         return redirect('/events')
     return render_template('create_event.html', form=form)
@@ -108,7 +175,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        user = models.User.query.filter_by(email=email).first()
         # Email doesn't exist
         if not user:
             flash("That email does not exist, please try again.")
@@ -131,7 +198,7 @@ def register():
     form = forms.RegistrationForm()
     if request.method == "POST":
 
-        if User.query.filter_by(email=request.form.get('email')).first():
+        if models.User.query.filter_by(email=request.form.get('email')).first():
             #User already exists
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
@@ -141,7 +208,7 @@ def register():
             method='pbkdf2:sha256',
             salt_length=8
         )
-        new_user = User(
+        new_user = models.User(
             email=request.form.get('email'),
             username=request.form.get('username'),
             password=hash_and_salted_password,
@@ -182,7 +249,7 @@ def show_profile(user_id):
 def show_all_users(): 
     """Show list of all users"""
 
-    users = User.query.all()
+    users = models.User.query.all()
     
     return render_template("all-users.html", users=users)
 
