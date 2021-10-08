@@ -1,6 +1,7 @@
 """
 This file contains all the routes for the Flask app.
 """
+
 from datetime import datetime
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,7 +13,6 @@ from project import db
 from project import forms
 from project import models
 from project import helpers
-
 
 
 @app.route('/')
@@ -107,16 +107,65 @@ def create_event():
     return render_template('create_event.html', form=form)
 
 
-@app.route('/events')
+@app.route('/events', methods=["GET", "POST"])
 def view_events():
     events = helpers.get_future_events()
-    return render_template('events.html', events=events)
+    form = forms.RSVPForm()
+
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            flash('You must be logged in to RSVP.')
+        else:
+            flash("You are now RSVP'd to this event.")
+            event_id = request.form.get("rsvp")
+            event = helpers.get_event_by_id(event_id)
+
+            # Checking if user has already RSVP'd
+            user_id = current_user.get_id()
+            future_events = helpers.get_future_user_events(user_id)
+            if event in future_events:
+                flash("You have already RSVD'd to this event.")
+            else:
+            # Add RSVP if they have not already RSVP'd
+                rsvp = models.EventAttendees(
+                                event_id=event_id,
+                                attendee_id=user_id,
+                                rsvp_at=datetime.now()
+                                )
+                db.session.add(rsvp)
+                db.session.commit()
+    return render_template('events.html', events=events, form=form)
 
 
-@app.route('/events/<int:event_id>')
+@app.route('/events/<int:event_id>', methods=["GET", "POST"])
 def view_event_details(event_id: int):
     event = models.Event.query.get(event_id)
-    return render_template('event_details.html', event=event)
+    events = helpers.get_future_events()
+    form = forms.RSVPForm()
+
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            flash('You must be logged in to RSVP.')
+        else:
+            flash("You are now RSVP'd to this event.")
+            event_id = request.form.get("rsvp")
+            event = helpers.get_event_by_id(event_id)
+
+            # Checking if user has already RSVP'd
+            user_id = current_user.get_id()
+            future_events = helpers.get_future_user_events(user_id)
+            if event in future_events:
+                flash("You have already RSVD'd to this event.")
+            else:
+            # Add RSVP if they have not already RSVP'd
+                rsvp = models.EventAttendees(
+                                event_id=event_id,
+                                attendee_id=user_id,
+                                rsvp_at=datetime.now()
+                                )
+                db.session.add(rsvp)
+                db.session.commit()
+    return render_template('event_details.html', event=event, form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -203,3 +252,6 @@ def show_all_users():
     users = models.User.query.all()
     
     return render_template("all-users.html", users=users)
+
+
+
