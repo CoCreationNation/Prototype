@@ -95,8 +95,8 @@ class EventAttendees(db.Model):
                    autoincrement=True,
                    nullable=False)
     event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
-    attendee_id =db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    rsvp_at =db.Column(db.DateTime(timezone=True))
+    attendee_id =db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)   
+    rsvp_at =db.Column(db.DateTime(timezone=True)) # time the user rsvp'd at
     attended_at = db.Column(db.DateTime(timezone=True))
 
 

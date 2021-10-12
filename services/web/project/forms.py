@@ -33,3 +33,6 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8)])
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     zip_code = StringField(label='Zip Code')
+
+class RSVPForm(FlaskForm):
+    submit = SubmitField(label='RSVP')

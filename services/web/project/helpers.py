@@ -4,7 +4,7 @@ import os
 from twilio.rest import Client
 from dotenv import load_dotenv
 
-from project import models
+from project import models, db
 
 def get_future_events() -> list:
     now = datetime.now()
@@ -15,6 +15,17 @@ def get_user_info(user_id):
     """Retrieve user using id"""
     
     return models.User.query.get(user_id)
+
+def get_event_by_id(event_id):
+    """Return an event by primary key/id."""
+
+    return models.Event.query.get(event_id)
+
+def get_event_time(event_id):
+    """Return the start time of an event by id."""
+    event = models.Event.query.get(event_id)
+
+    return event.start_utc
 
 def get_user_events(user_id): 
     """Retrieve the events a user has attended"""
@@ -49,3 +60,18 @@ def get_chatroom(name):
     # a conversation with the given name does not exist ==> create a new one
     return twilio_client.conversations.conversations.create(
         friendly_name=name)
+def get_future_user_events(user_id: int) -> list:
+    """Retrieve list of upcoming events a user has RSVP'd to."""
+
+    now = datetime.now()
+    future_events = []
+
+    user_events = models.EventAttendees.query.filter(models.EventAttendees.attendee_id == user_id)
+
+    for record in user_events:
+        event = models.Event.query.filter(models.Event.id == record.event_id).first()
+        print(f'start type: {type(event.start_utc)}')
+        if (event.start_utc.replace(tzinfo=None)) > now:
+            future_events.append(event)
+    
+    return future_events
