@@ -23,6 +23,9 @@ def index():
 @app.route('/events/create-event', methods=['GET', 'POST'])
 @login_required
 def create_event():
+    if current_user.user_type != 'admin':
+        flash("You do not have permission to create events.")
+        return redirect('/events')
     form = forms.CreateEventForm()
     print(form.data)
     if form.validate_on_submit():
