@@ -13,7 +13,7 @@ app = Flask(__name__, template_folder='templates')
 app.config.from_object("project.config.Config")
 Bootstrap(app)
 db = SQLAlchemy(app)
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app) # TODO: add CSRF token through JavaScript. https://stackoverflow.com/questions/22854749/flask-and-ajax-post-http-400-bad-request-error
 
 
 # while it is usually better to do all imports at the top of the file, importing here mid-file is a best practice for Flask
