@@ -17,8 +17,7 @@
         <td><a href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></td>
         <td>{{ event.description }}</td>
         <td>{{ event.start_utc }}</td>
-        <td>{{ event.end_utc }}</td>
-         
+        <td>{{ event.end_utc }}</td> 
     </tr>
     {% endfor %}
 </table>
