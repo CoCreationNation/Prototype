@@ -3,6 +3,7 @@ This file contains all the routes for the Flask app.
 """
 
 from datetime import datetime
+import os
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
@@ -13,6 +14,8 @@ from project import db
 from project import forms
 from project import models
 from project import helpers
+from project import token
+from project import email
 
 
 @app.route('/')
@@ -221,9 +224,37 @@ def register():
         db.session.commit()
         login_user(new_user)
         flash('Your account has been registered.')
+
+        user_token = token.generate_confirmation_token(new_user.email)
+        confirm_url = url_for('confirm_email', user_token=user_token, _external=True)
+        html = render_template('email_confirmation.html', confirm_url=confirm_url)
+        subject = "Please confirm your email"
+        email.send_email(new_user.email, subject, html)
+
         return redirect(url_for("index"))
 
     return render_template("register.html", form=form)
+
+
+@app.route('/confirm/<user_token>')
+@login_required
+def confirm_email(user_token):
+    print('token:', user_token)
+    try:
+        email = token.confirm_token(user_token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+        return redirect(url_for('index'))
+    print('querying user...')
+    user = models.User.query.filter_by(email=email).first_or_404()
+    if user.email_confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.email_confirmed = True
+        db.session.add(user)
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('index'))
 
 
 @app.route('/logout', methods=["GET"])
