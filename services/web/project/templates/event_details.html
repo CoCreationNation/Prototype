@@ -3,13 +3,6 @@
 {% block title %}Event Details{% endblock %}
 
 {% block content %}
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-    {% endif %}
-{% endwith %}
 
 <h2>{{ event.title }}</h2>
 <div>{{ event.description }}</div>
