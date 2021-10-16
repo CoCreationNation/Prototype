@@ -3,6 +3,7 @@
 
 <head>
     {% block head %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>{% block title %}{% endblock %} - CoCreation Nation</title>
     {% endblock %}
@@ -20,11 +21,9 @@
                     {% if current_user.user_type == "admin" %}
                     <li class="subitem"><a href="{{ url_for('create_event') }}">Create Event</a></li>
                     {% endif %}
-                    <li class="subitem"><a href="#">Join Event</a></li>
-                    
+                    <li class="subitem"><a href="{{ url_for('live_event', event_id=1) }}">Join Event</a></li>
                 </ul>
             </li>
-            <li class="item"><a href="#">Blog</a></li>
             <li class="item"><a href="#">Contact</a></li>
             {% if current_user.is_authenticated %}
             <li class="item button secondary"><a href="{{ url_for('logout') }}">Sign Out</a></li>

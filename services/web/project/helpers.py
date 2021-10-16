@@ -1,4 +1,7 @@
 from datetime import datetime
+import os
+
+from twilio.rest import Client
 
 from project import models, db
 
@@ -42,6 +45,19 @@ def get_user_events(user_id):
     #TODO: order events by date
     return user_past_events
 
+def get_chatroom(name):
+    twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+    twilio_api_key_sid = os.environ.get('TWILIO_API_KEY_SID')
+    twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
+    twilio_client = Client(twilio_api_key_sid, twilio_api_key_secret,
+                       twilio_account_sid)
+    for conversation in twilio_client.conversations.conversations.stream():
+        if conversation.friendly_name == name:
+            return conversation
+
+    # a conversation with the given name does not exist ==> create a new one
+    return twilio_client.conversations.conversations.create(
+        friendly_name=name)
 def get_future_user_events(user_id: int) -> list:
     """Retrieve list of upcoming events a user has RSVP'd to."""
 
