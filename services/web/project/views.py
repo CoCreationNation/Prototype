@@ -7,6 +7,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, logout_user, login_required, current_user
+import pytz
 
 from project import app
 from project import db
@@ -28,8 +29,8 @@ def create_event():
     if form.validate_on_submit():
         print('Adding event to DB...')
         event = models.Event(
-            start_utc = form.start.data,
-            end_utc = form.end.data,
+            start_utc = helpers.convert_dateime_to_utc(form.start.data, form.timezone.data),
+            end_utc = helpers.convert_dateime_to_utc(form.end.data, form.timezone.data),
             title = form.title.data,
             description = form.description.data,
             restrict_by_zipcode = form.restrict_attendees.data

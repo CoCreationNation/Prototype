@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import pytz
+
 from project import models, db
 
 def get_future_events() -> list:
@@ -57,3 +59,11 @@ def get_future_user_events(user_id: int) -> list:
             future_events.append(event)
     
     return future_events
+
+
+def convert_dateime_to_utc(dt: datetime, tz: str) -> datetime:
+    local = pytz.timezone(tz)
+    naive = dt
+    local_dt = local.localize(naive, is_dst=None)
+    utc_dt = local_dt.astimezone(pytz.utc)
+    return utc_dt
