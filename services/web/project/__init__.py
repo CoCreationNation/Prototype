@@ -17,8 +17,9 @@ app.config.from_object("project.config.Config")
 app.jinja_env.globals['momentjs'] = momentjs
 Bootstrap(app)
 db = SQLAlchemy(app)
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app) # TODO: add CSRF token through JavaScript. Removed for issues with video chat. https://stackoverflow.com/questions/22854749/flask-and-ajax-post-http-400-bad-request-error
 mail = Mail(app)
+
 
 
 # while it is usually better to do all imports at the top of the file, importing here mid-file is a best practice for Flask

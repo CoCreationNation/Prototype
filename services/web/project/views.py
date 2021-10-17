@@ -5,10 +5,15 @@ This file contains all the routes for the Flask app.
 from datetime import datetime
 import os
 
+from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import render_template, request, url_for, redirect, flash
+from flask import render_template, request, url_for, redirect, flash, abort, jsonify
+from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, logout_user, login_required, current_user
 import pytz
+from twilio.base.exceptions import TwilioRestException
+from twilio.jwt.access_token import AccessToken
+from twilio.jwt.access_token.grants import VideoGrant, ChatGrant
 
 from project import app
 from project import db
@@ -18,6 +23,12 @@ from project import helpers
 from project import token
 from project import email
 
+csrf = CSRFProtect()
+
+load_dotenv()
+twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+twilio_api_key_sid = os.environ.get('TWILIO_API_KEY_SID')
+twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
 
 @app.route('/')
 def index():
@@ -173,6 +184,34 @@ def view_event_details(event_id: int):
                 db.session.add(rsvp)
                 db.session.commit()
     return render_template('event_details.html', event=event, form=form)
+
+
+@app.route('/live-event/<int:event_id>')
+def live_event(event_id):
+    return render_template('event.html')
+
+
+@app.route('/event_login', methods=['POST'])
+def event_login():
+    username = request.get_json(force=True).get('username')
+    if not username:
+        abort(401)
+
+    conversation = helpers.get_chatroom('My Room')
+    try:
+        conversation.participants.create(identity=username)
+    except TwilioRestException as exc:
+        # do not error if the user is already in the conversation
+        if exc.status != 409:
+            raise
+
+    token = AccessToken(twilio_account_sid, twilio_api_key_sid,
+                        twilio_api_key_secret, identity=username)
+    token.add_grant(VideoGrant(room='My Room'))
+    token.add_grant(ChatGrant(service_sid=conversation.chat_service_sid))
+
+    return {'token': token.to_jwt().decode(),
+            'conversation_sid': conversation.sid}
 
 
 @app.route('/login', methods=["GET", "POST"])
