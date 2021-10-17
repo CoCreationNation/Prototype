@@ -78,7 +78,7 @@ def create_event():
         tags_list: list = tags_string.split(',')
         for tag in tags_list:
             clean_tag = tag.strip()
-            event_tag= models.EventTags(
+            event_tag = models.EventTags(
                 tag = clean_tag,
                 event_id = event_id
             )
@@ -156,6 +156,12 @@ def view_events():
 @app.route('/events/<int:event_id>', methods=["GET", "POST"])
 def view_event_details(event_id: int):
     event = models.Event.query.get(event_id)
+    event_tags = models.EventTags.query.filter_by(event_id = event_id).all()
+    event_tags_items = [tag.tag for tag in event_tags]
+    final_list_tags = ",".join(event_tags_items) #list to string conversion
+    eligible_zipcodes = models.EventEligibleZipcode.query.filter_by(event_id = event_id).all()
+    zipcode_items = [zipcode.zipcode for zipcode in eligible_zipcodes]
+    final_zipcodes = ",".join(zipcode_items)
     events = helpers.get_future_events()
     form = forms.RSVPForm()
 
@@ -181,8 +187,7 @@ def view_event_details(event_id: int):
                                 )
                 db.session.add(rsvp)
                 db.session.commit()
-    return render_template('event_details.html', event=event, form=form)
-
+     return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
 
 @app.route('/live-event/<int:event_id>')
 def live_event(event_id):
