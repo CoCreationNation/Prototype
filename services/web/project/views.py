@@ -3,18 +3,30 @@ This file contains all the routes for the Flask app.
 """
 
 from datetime import datetime
+import os
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import render_template, request, url_for, redirect, flash
+from flask import render_template, request, url_for, redirect, flash, abort, jsonify
+from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, logout_user, login_required, current_user
+import pytz
+from twilio.base.exceptions import TwilioRestException
+from twilio.jwt.access_token import AccessToken
+from twilio.jwt.access_token.grants import VideoGrant, ChatGrant
 
 from project import app
 from project import db
 from project import forms
 from project import models
 from project import helpers
+from project import token
+from project import email
 
+csrf = CSRFProtect()
 
+twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+twilio_api_key_sid = os.environ.get('TWILIO_API_KEY_SID')
+twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
 
 @app.route('/')
 def index():
@@ -24,13 +36,16 @@ def index():
 @app.route('/events/create-event', methods=['GET', 'POST'])
 @login_required
 def create_event():
+    if current_user.user_type != 'admin':
+        flash("You do not have permission to create events.")
+        return redirect('/events')
     form = forms.CreateEventForm()
     print(form.data)
     if form.validate_on_submit():
         print('Adding event to DB...')
         event = models.Event(
-            start_utc = form.start.data,
-            end_utc = form.end.data,
+            start_utc = helpers.convert_dateime_to_utc(form.start.data, form.timezone.data),
+            end_utc = helpers.convert_dateime_to_utc(form.end.data, form.timezone.data),
             title = form.title.data,
             description = form.description.data,
             restrict_by_zipcode = form.restrict_attendees.data
@@ -108,13 +123,37 @@ def create_event():
     return render_template('create_event.html', form=form)
 
 
-@app.route('/events')
+@app.route('/events', methods=["GET", "POST"])
 def view_events():
     events = helpers.get_future_events()
-    return render_template('events.html', events=events)
+    form = forms.RSVPForm()
+
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            flash('You must be logged in to RSVP.')
+        else:
+            flash("You are now RSVP'd to this event.")
+            event_id = request.form.get("rsvp")
+            event = helpers.get_event_by_id(event_id)
+
+            # Checking if user has already RSVP'd
+            user_id = current_user.get_id()
+            future_events = helpers.get_future_user_events(user_id)
+            if event in future_events:
+                flash("You have already RSVD'd to this event.")
+            else:
+            # Add RSVP if they have not already RSVP'd
+                rsvp = models.EventAttendees(
+                                event_id=event_id,
+                                attendee_id=user_id,
+                                rsvp_at=datetime.now()
+                                )
+                db.session.add(rsvp)
+                db.session.commit()
+    return render_template('events.html', events=events, form=form)
 
 
-@app.route('/events/<int:event_id>')
+@app.route('/events/<int:event_id>', methods=["GET", "POST"])
 def view_event_details(event_id: int):
     event = models.Event.query.get(event_id)
     event_tags = models.EventTags.query.filter_by(event_id = event_id).all()
@@ -123,8 +162,59 @@ def view_event_details(event_id: int):
     eligible_zipcodes = models.EventEligibleZipcode.query.filter_by(event_id = event_id).all()
     zipcode_items = [zipcode.zipcode for zipcode in eligible_zipcodes]
     final_zipcodes = ",".join(zipcode_items)
+    events = helpers.get_future_events()
+    form = forms.RSVPForm()
 
-    return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            flash('You must be logged in to RSVP.')
+        else:
+            flash("You are now RSVP'd to this event.")
+            event_id = request.form.get("rsvp")
+            event = helpers.get_event_by_id(event_id)
+
+            # Checking if user has already RSVP'd
+            user_id = current_user.get_id()
+            future_events = helpers.get_future_user_events(user_id)
+            if event in future_events:
+                flash("You have already RSVD'd to this event.")
+            else:
+            # Add RSVP if they have not already RSVP'd
+                rsvp = models.EventAttendees(
+                                event_id=event_id,
+                                attendee_id=user_id,
+                                rsvp_at=datetime.now()
+                                )
+                db.session.add(rsvp)
+                db.session.commit()
+     return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
+
+@app.route('/live-event/<int:event_id>')
+def live_event(event_id):
+    return render_template('event.html')
+
+
+@app.route('/event_login', methods=['POST'])
+def event_login():
+    username = request.get_json(force=True).get('username')
+    if not username:
+        abort(401)
+
+    conversation = helpers.get_chatroom('My Room')
+    try:
+        conversation.participants.create(identity=username)
+    except TwilioRestException as exc:
+        # do not error if the user is already in the conversation
+        if exc.status != 409:
+            raise
+
+    token = AccessToken(twilio_account_sid, twilio_api_key_sid,
+                        twilio_api_key_secret, identity=username)
+    token.add_grant(VideoGrant(room='My Room'))
+    token.add_grant(ChatGrant(service_sid=conversation.chat_service_sid))
+
+    return {'token': token.to_jwt().decode(),
+            'conversation_sid': conversation.sid}
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -177,9 +267,37 @@ def register():
         db.session.commit()
         login_user(new_user)
         flash('Your account has been registered.')
+
+        user_token = token.generate_confirmation_token(new_user.email)
+        confirm_url = url_for('confirm_email', user_token=user_token, _external=True)
+        html = render_template('email_confirmation.html', confirm_url=confirm_url)
+        subject = "Please confirm your email"
+        email.send_email(new_user.email, subject, html)
+
         return redirect(url_for("index"))
 
     return render_template("register.html", form=form)
+
+
+@app.route('/confirm/<user_token>')
+@login_required
+def confirm_email(user_token):
+    print('token:', user_token)
+    try:
+        email = token.confirm_token(user_token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+        return redirect(url_for('index'))
+    print('querying user...')
+    user = models.User.query.filter_by(email=email).first_or_404()
+    if user.email_confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.email_confirmed = True
+        db.session.add(user)
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('index'))
 
 
 @app.route('/logout', methods=["GET"])
@@ -211,3 +329,6 @@ def show_all_users():
     users = models.User.query.all()
     
     return render_template("all-users.html", users=users)
+
+
+
