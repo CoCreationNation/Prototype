@@ -5,7 +5,6 @@ This file contains all the routes for the Flask app.
 from datetime import datetime
 import os
 
-from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
@@ -25,7 +24,6 @@ from project import email
 
 csrf = CSRFProtect()
 
-load_dotenv()
 twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
 twilio_api_key_sid = os.environ.get('TWILIO_API_KEY_SID')
 twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
