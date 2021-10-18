@@ -187,7 +187,7 @@ def view_event_details(event_id: int):
                                 )
                 db.session.add(rsvp)
                 db.session.commit()
-     return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
+    return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
 
 @app.route('/live-event/<int:event_id>')
 def live_event(event_id):
