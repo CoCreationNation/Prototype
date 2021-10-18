@@ -36,3 +36,6 @@ class RegistrationForm(FlaskForm):
 
 class RSVPForm(FlaskForm):
     submit = SubmitField(label='RSVP')
+
+class DeleteUserForm(FlaskForm):
+    submit = SubmitField(label='Delete User')

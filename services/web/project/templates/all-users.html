@@ -22,6 +22,13 @@ Users List
                 {% endif %}
             </a>
         </li>
+        {% if current_user.user_type == 'admin' %}
+        <form action="{{ url_for('delete_user', user_id=user.id) }}" method="POST">
+                {{ form.csrf_token }}
+                <input type="hidden" name="delete-user" value="{{ user.id }}"/>
+                <button type="submit" id="delete-user">Delete User</button>
+        </form>
+        {% endif %}
     {% endfor %}
 
 {% else %}

@@ -187,7 +187,7 @@ def view_event_details(event_id: int):
                                 )
                 db.session.add(rsvp)
                 db.session.commit()
-     return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
+    return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
 
 @app.route('/live-event/<int:event_id>')
 def live_event(event_id):
@@ -321,7 +321,7 @@ def show_profile(user_id):
     return render_template("user-profile.html", user=user, events=attended_events)
 
 
-@app.route("/all-users")
+@app.route("/all-users", methods = ["POST"])
 @login_required
 def show_all_users(): 
     """Show list of all users"""
@@ -329,6 +329,21 @@ def show_all_users():
     users = models.User.query.all()
     
     return render_template("all-users.html", users=users)
+
+def delete_user(user):
+    """Admin privilege to delete a user."""
+
+    if current_user.user_type != 'admin':
+            flash('You do not have permission to delete users.')
+    form = forms.DeleteUserForm()
+    if request.method == "POST":
+        user = request.form.get('delete-user')
+        helpers.delete_user(user)
+        db.session.commit()
+        flash('User has been deleted.')
+
+    return render_template("all-users.html", user = user)
+    
 
 
 
