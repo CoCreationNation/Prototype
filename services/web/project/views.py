@@ -342,7 +342,6 @@ def delete_user(user_id):
     form = forms.DeleteUserForm()
     if request.method == "POST":
         user = request.form.get('delete-user')
-        # user = helpers.get_user_info(user_id)
         helpers.delete_user(user)
         db.session.commit()
         flash('User has been deleted.')
@@ -350,7 +349,6 @@ def delete_user(user_id):
     else:
         render_template("all-users.html", users=users, form=form)
 
-    # return render_template("all-users.html", users=users, form=form )
 
     
 
