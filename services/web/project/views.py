@@ -352,7 +352,29 @@ def edit_profile(user_id):
 def show_all_users(): 
     """Show list of all users"""
 
+    form = forms.DeleteUserForm()
     users = models.User.query.all()
     
-    return render_template("all-users.html", users=users)
+    return render_template("all-users.html", users=users, form=form)
+
+@app.route('/delete-user/<int:user_id>', methods=["GET", "POST"])
+@login_required
+def delete_user(user_id):
+    """Admin privilege to delete user."""
+
+    users = models.User.query.all()
+    if current_user.user_type != 'admin':
+        flash('You do not have permission to delete users.')
+    form = forms.DeleteUserForm()
+    if request.method == "POST":
+        user = request.form.get('delete-user')
+        helpers.delete_user(user)
+        db.session.commit()
+        flash('User has been deleted.')
+        return render_template("all-users.html", form=form, user=user)
+    else:
+        render_template("all-users.html", users=users, form=form)
+
+
+    
 

@@ -126,4 +126,9 @@ def convert_dateime_to_utc(dt: datetime, tz: str) -> datetime:
     utc_dt = local_dt.astimezone(pytz.utc)
     return utc_dt
 
+def delete_user(user_id):
+    """Delete a user by id."""
+
+    return models.User.query.filter_by(id = user_id).delete()
+    
 
