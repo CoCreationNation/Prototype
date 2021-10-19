@@ -8,9 +8,6 @@ from project import app, db, models
 cli = FlaskGroup(app)
 
 
-
-
-
 @cli.command("create_db")
 def create_db():
     db.drop_all()
@@ -37,6 +34,28 @@ def seed_db():
     )
     db.session.add(event2)
 
+    event3 = models.Event(
+        start_utc = datetime.now() - timedelta(minutes=3),
+        end_utc = datetime.now() + timedelta(hours=2),
+        title = 'My Live Event',
+        description = 'This is the Event where we see all our lovely faces.'
+    )
+    db.session.add(event3)
+
+    admin1_password = generate_password_hash(
+            'secret',
+            method='pbkdf2:sha256',
+            salt_length=8
+        )
+    admin1 = models.User(
+        username="admin1",
+        password=admin1_password,
+        email="admin1@example.com",
+        zip_code='90064',
+        user_type='admin'
+    )
+    db.session.add(admin1)
+
     user1_password = generate_password_hash(
             'secret1',
             method='pbkdf2:sha256',
@@ -62,6 +81,19 @@ def seed_db():
         zip_code='90064'
     )
     db.session.add(user2)
+
+    user3_password = generate_password_hash(
+            'secret3',
+            method='pbkdf2:sha256',
+            salt_length=8
+        )
+    user3 = models.User(
+        username="not_another_user",
+        password=user3_password,
+        email="not_another_user@example.com",
+        zip_code='90065'
+    )
+    db.session.add(user3)
     db.session.commit()
 
 

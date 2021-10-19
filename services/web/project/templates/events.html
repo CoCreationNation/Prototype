@@ -3,6 +3,7 @@
 {% block title %}Events{% endblock %}
 
 {% block content %}
+
 <h2>Upcoming Events</h2>
 <table>
     <tr>
@@ -12,12 +13,19 @@
         <th>Ending At</th>
     </tr>
     {% for event in events %}
-    <script>console.log("{{ event }}")</script>
     <tr>
         <td><a href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></td>
         <td>{{ event.description }}</td>
-        <td>{{ event.start_utc }}</td>
-        <td>{{ event.end_utc }}</td>
+
+        <td>{{ momentjs(event.start_utc).calendar() }}</td>
+        <td>{{ momentjs(event.end_utc).calendar() }}</td>
+        <td>
+        <form action="{{ url_for('view_events') }}" method="POST">
+            {{ form.csrf_token }}
+            <input type="hidden" name="rsvp" value="{{ event.id }}"/>
+            <button type="submit" id="rsvp">RSVP</button>
+        </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
