@@ -5,6 +5,7 @@ This file contains all the routes for the Flask app.
 from datetime import datetime
 import os
 
+#from typing_extensions import Required
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
@@ -308,18 +309,43 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route("/user-profile/<user_id>")
+@app.route('/user-profile/<user_id>')
 @login_required
 def show_profile(user_id):
     """Show a user's profile with their account info"""
     
     user = helpers.get_user_info(user_id) 
     attended_events = helpers.get_user_events(user_id)
-    
-    #TODO: implement current_user from flask_login extension to only make the logged in user's profile editable
-        # https://flask-login.readthedocs.io/en/latest/#flask_login.current_user 
-    return render_template("user-profile.html", user=user, events=attended_events)
+    user_in_session = current_user
 
+    return render_template("user-profile.html", user=user, events=attended_events, user_in_session=user_in_session)
+
+@app.route('/edit-profile/<user_id>', methods=["GET", "POST"])
+@login_required
+def edit_profile(user_id): 
+    """Gather and save edited info to signed in user"""
+
+    form = forms.RegistrationForm()
+
+    first_name = form.first_name.data 
+    last_name = form.last_name.data
+    pronouns = form.pronouns.data
+    address_1 = form.address_1.data
+    city = form.city.data
+    state = form.state.data
+    zip_code = form.zip_code.data
+    phone_number = form.phone_number.data
+
+    if request.method == "POST": 
+        user = helpers.update_user_details(user_id, first_name, last_name,
+                                           pronouns, address_1, city, state, zip_code, phone_number)
+        return redirect("/user-profile/" + str(user_id))
+
+    user = helpers.get_user_info(user_id)
+    
+    #TODO: Allow user to update their email/username(?) and add check for dupe usernames/email validation
+
+    return render_template("edit-profile.html",  user=user, form=form)
 
 @app.route("/all-users")
 @login_required
@@ -329,6 +355,4 @@ def show_all_users():
     users = models.User.query.all()
     
     return render_template("all-users.html", users=users)
-
-
 
