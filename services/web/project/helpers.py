@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 
+
 from twilio.rest import Client
 
 import pytz
@@ -16,7 +17,7 @@ def get_future_events() -> list:
 
 def get_user_info(user_id):
     """Retrieve user using id"""
-    
+   
     return models.User.query.get(user_id)
 
 def get_event_by_id(event_id):
@@ -48,6 +49,45 @@ def get_user_events(user_id):
 
     #TODO: order events by date
     return user_past_events
+
+def update_user_details(user_id, first_name, last_name, pronouns, address_1, city, state, zip_code, phone_number): 
+    """Update a user's details"""
+
+    user = get_user_info(user_id)
+    
+    if zip_code: #zip_code is not a nullable field in models.py
+        
+        zip_code = int(float(zip_code))
+
+        models.User.query.filter(models.User.id == user_id).update(
+            {
+                "first_name": first_name,
+                "last_name": last_name,
+                "pronouns": pronouns,
+                "address_1": address_1,
+                "city": city,
+                "state": state,
+                "zip_code": zip_code,
+                "phone_number": phone_number
+            }
+        )
+    else:
+        models.User.query.filter(models.User.id == user_id).update(
+            {
+                "first_name": first_name,
+                "last_name": last_name,
+                "pronouns": pronouns,
+                "address_1": address_1,
+                "city": city,
+                "state": state,
+                "phone_number": phone_number
+            }
+        )
+
+    
+    db.session.commit() 
+
+    return user
 
 def get_chatroom(name):
     twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
@@ -91,3 +131,4 @@ def delete_user(user_id):
 
     return models.User.query.filter_by(id = user_id).delete()
     
+

@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import DataRequired, Email, Length
+from project import models 
 
 
 class CreateEventForm(FlaskForm):
@@ -33,9 +34,19 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8)])
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     zip_code = StringField(label='Zip Code')
+    first_name = StringField(label='First Name')
+    last_name = StringField(label='Last Name')
+    pronouns = SelectField(label='Pronouns', choices=[('she', 'She/Her'), 
+                            ('he', 'He/Him'), ('they', 'They/Them'), 
+                            ('other', 'Other')])
+    address_1 = TextAreaField(label='Address')
+    city = StringField(label='City')
+    state = StringField(label='State')
+    phone_number = StringField(label='Phone Number')
 
 class RSVPForm(FlaskForm):
     submit = SubmitField(label='RSVP')
 
 class DeleteUserForm(FlaskForm):
     submit = SubmitField(label='Delete User')
+
