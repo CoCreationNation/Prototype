@@ -126,6 +126,10 @@ def create_event():
 @app.route('/events', methods=["GET", "POST"])
 def view_events():
     events = helpers.get_future_events()
+    events_by_three = helpers.group_list_by_threes(events)
+    
+    user_events = helpers.get_future_user_events(current_user.id) if current_user.is_authenticated else []
+
     form = forms.RSVPForm()
 
     if request.method == "POST":
@@ -150,7 +154,7 @@ def view_events():
                                 )
                 db.session.add(rsvp)
                 db.session.commit()
-    return render_template('events.html', events=events, form=form)
+    return render_template('events.html', events_by_three=events_by_three, user_events=user_events, form=form)
 
 
 @app.route('/events/<int:event_id>', methods=["GET", "POST"])
@@ -187,7 +191,7 @@ def view_event_details(event_id: int):
                                 )
                 db.session.add(rsvp)
                 db.session.commit()
-    return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes)
+    return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes, form=form)
 
 @app.route('/live-event/<int:event_id>')
 def live_event(event_id):

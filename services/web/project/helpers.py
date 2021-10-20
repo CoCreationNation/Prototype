@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+from typing import Optional
 
 from twilio.rest import Client
 
@@ -79,6 +80,7 @@ def get_future_user_events(user_id: int) -> list:
     
     return future_events
 
+
 def convert_dateime_to_utc(dt: datetime, tz: str) -> datetime:
     local = pytz.timezone(tz)
     naive = dt
@@ -86,3 +88,17 @@ def convert_dateime_to_utc(dt: datetime, tz: str) -> datetime:
     utc_dt = local_dt.astimezone(pytz.utc)
     return utc_dt
 
+
+def group_list_by_threes(items: list, new_list: Optional[list] = None) -> list:
+    """
+    This function takes a list of items and groups it into a list of lists, with
+    three items in each inner list.
+    """
+    new_list = [] if not new_list else new_list
+
+    new_list.append(items[:3])
+    new_items = items[3:]
+    if new_items:
+        group_list_by_threes(new_items, new_list)
+    
+    return new_list
