@@ -16,36 +16,67 @@ My Profile
 <br>
 
 <div class="container">
-    <h4>Personal Information</h4>
-    <br>
-    <h7><b>Name: </b>{{user.first_name}} {{user.last_name}}</h7>
-    <br>
-    <h7><b>Pronouns: </b>{{user.pronouns}}</h7>
-    <br>
-    <h7><b>Email: </b>{{user.email}}</h7>
-    <br>
-    <h7><b>Phone: </b>{{user.phone_number}}</h7>
-    <br>
-    <h7><b>Zipcode: </b>{{user.zipcode}}</h7>
-    <br>
-    <h7><b>Profile Picture</b></h7>
-    <!--TODO: display user profile pictures here-->
-    <input required type="file" accept="image/*" name="image" id="file">
+    <form action="/edit-profile/{{user.id}}">
+
+        <h3>Personal Information</h3>
+        <br>
+
+        <h7><b>Name: </b>{{user.first_name}} {{user.last_name}}</h7>
+        <br>
+        <br>
+
+        <h7><b>Pronouns: </b>{{user.pronouns.value}}</h7>
+        <br>
+        <br>
+
+        <h7><b>Email: </b>{{user.email}}</h7>
+        <br>
+        <br>
+
+        <h7><b>Phone: </b>{{user.phone_number}}</h7>
+        <br>
+        <br>
+
+        <h7><b>City: </b>{{user.city}}</h7>
+        <br>
+        <br>
+
+        <h7><b>Zipcode: </b>{{user.zip_code}}</h7>
+        <br>
+        <br>
+
+        <h7><b>State: </b>{{user.state}}</h7>
+        <br>
+        <br>
+        
+        <h7><b>Profile Picture</b></h7>
+        <br>
+
+    
+        <!--TODO: ADD ABILITY TO UPLOAD PROFILE PIC AND HOST ON AWS S3-->
+        <!--TODO: make required type-->
+        <input type = "file" class="form-control-file" accept="image/*" name = "image" id = "file" onchange = "loadFile(event)" style="display": none;"></p>
+        
+        <!--Display user profile pictures here-->
+        <img class="img-thumbnail rounded-start" id="output" width="300" onerror="this.onerror=null; this.remove();">
+
 </div>
+<br>
+    <!--Only allow user to edit profile if they are viewing their own page-->
+    {% if user == user_in_session %}
+        <div class="container">
+            <button type="submit" value = "Update Profile" id="edit">Update Profile</button>
+        </div>
+    {% endif %}
+</form>
 
 <br>
 
-<div class="container">
-    <button type="click" id="update-profile">Update Profile</button>
-</div>
-
-<br>
-
-<!--WIP: include Events Attended in a second column?-->
+<!--List of Past Events Attended-->
 <div class="container"></div>
      <h4>Events Attended</h4>
      <br>
-     {% if events %}   <!--if a user has attended an event(s)-->
+     {% if events %} 
         {% for event in events %} 
 
             <td><a href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></td>
@@ -55,9 +86,16 @@ My Profile
             <br>
 
         {% endfor %}
+
+    {% else %} 
+    
+       {% if user == user_in_session %} 
+            <h7>You haven't attended any events yet.</h7>
+        {% else %}
+            <h7>This user hasn't attended any events yet.</h7>
+        {% endif %}
+
      {% endif %}
-
-
+     
 </div>
-
 {% endblock %}

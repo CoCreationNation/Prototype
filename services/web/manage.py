@@ -115,7 +115,7 @@ def seed_db():
         username="a_user",
         password=user1_password,
         email="a_user@example.com",
-        zip_code='90064'
+        zip_code='90064',
     )
     db.session.add(user1)
 
