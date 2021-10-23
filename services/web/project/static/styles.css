@@ -47,3 +47,38 @@
     color: #5c5c5c;
     text-decoration: none;
 }
+
+.dark-container {
+    background-color: #3b3b3b;
+    color: white;
+}
+
+.dark-container > .col {
+    padding-left: 40px ;
+}
+
+.off-white-container {
+    background-color: #fffeed;
+}
+
+.light-gray-container {
+    background-color: #c7c7c7;
+}
+
+.black-container {
+    background-color: #171717;
+    color: white;
+}
+
+.inner-container {
+    max-width: 1200px;
+    padding: 80px;
+}
+
+.dark-box {
+    background-color: #7d7d7d;
+    color: white;
+    font-size: 1.4em;
+    margin: 20px 20%;
+    height: 150px;
+}

@@ -380,5 +380,7 @@ def delete_user(user_id):
         render_template("all-users.html", users=users, form=form)
 
 
-    
+@app.route('/about-us')
+def about_us():
+    return render_template("about-us.html") 
 
