@@ -25,3 +25,25 @@
 .landing-view-all-events-btn {
     margin-top: 2em;
 }
+
+.event-image {
+    height: 300px;
+}
+
+.event-card {
+    height: 500px;
+    width: 22rem;
+}
+
+.event-card-title {
+    color: #858585;
+}
+
+.event-search {
+    margin-top: 20px;
+}
+
+.event-filter-button {
+    color: #5c5c5c;
+    text-decoration: none;
+}

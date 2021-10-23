@@ -69,6 +69,7 @@ class Event(db.Model):
     title = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text, nullable=True)
     restrict_by_zipcode = db.Column(db.Boolean(), nullable=False, server_default='f')
+    image_url = db.Column(db.String)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=sql.func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=sql.func.now(), nullable=True)
@@ -82,7 +83,7 @@ class EventAdmin(db.Model):
                    primary_key=True,
                    autoincrement=True,
                    nullable=False)
-    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     admin_level = db.Column(db.String, nullable= True) # levels are considered as "level one, two etc"
 
@@ -94,9 +95,9 @@ class EventAttendees(db.Model):
                    primary_key=True,
                    autoincrement=True,
                    nullable=False)
-    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
-    attendee_id =db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)   
-    rsvp_at =db.Column(db.DateTime(timezone=True)) # time the user rsvp'd at
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    attendee_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)   
+    rsvp_at = db.Column(db.DateTime(timezone=True)) # time the user rsvp'd at
     attended_at = db.Column(db.DateTime(timezone=True))
 
 
@@ -107,8 +108,8 @@ class EventTags(db.Model):
                    primary_key=True,
                    autoincrement=True,
                    nullable=False)
-    event_id =db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
-    tag =db.Column(db.String, nullable= False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    tag = db.Column(db.String, nullable= False)
 
 
 class EventEligibleZipcode(db.Model):

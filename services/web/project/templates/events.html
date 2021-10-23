@@ -4,30 +4,73 @@
 
 {% block content %}
 
-<h2>Upcoming Events</h2>
-<table>
-    <tr>
-        <th>Event Name</th>
-        <th>Description</th>
-        <th>Start Date</th>
-        <th>Ending At</th>
-    </tr>
-    {% for event in events %}
-    <tr>
-        <td><a href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></td>
-        <td>{{ event.description }}</td>
+<div class="row event-search">
+    <div class="col-4 offset-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="search" aria-label="search" aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-2 offset-3"><a href="#" class="event-filter-button"><h5>Upcoming events</h5></a></div>
+    <div class="col-2"><a href="#" class="event-filter-button"><h5>Events in progress</h5></a></div>
+    <div class="col-2"><a href="#" class="event-filter-button"><h5>Previous events</h5></a></div>
+</div>
 
-        <td>{{ momentjs(event.start_utc).calendar() }}</td>
-        <td>{{ momentjs(event.end_utc).calendar() }}</td>
-        <td>
-        <form action="{{ url_for('view_events') }}" method="POST">
-            {{ form.csrf_token }}
-            <input type="hidden" name="rsvp" value="{{ event.id }}"/>
-            <button type="submit" id="rsvp">RSVP</button>
-        </form>
-        </td>
-    </tr>
+<div class="container">
+    {% if user_events %}
+    <hr>
+    <div class="row">
+        <h3>Your Upcoming Events</h3>
+    </div>
+    <div class="row">
+        {% for event in user_events[:3] %}
+        <div class="col">
+            <div class="card text-center event-card">
+                <img src="{{ url_for('static', filename=event.image_url) }}"
+                    class="card-img-top mx-auto d-block event-image" alt="picture of people">
+                <div class="card-body">
+                    <h5 class="card-title"><a class="event-card-title" href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></h5>
+                    <hr>
+                    <p class="card-text">Event date: {{ momentjs(event.start_utc).calendar() }}</p>
+                    <p class="card-text">{{ event.description }}</p>
+                    <a href="{{ url_for('view_event_details', event_id=event.id) }}" class="btn btn-outline-secondary">View Event</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <hr>
+    <div class="row">
+        <h3>All Upcoming Events</h3>
+    </div>
+    {% for event_row in events_by_three %}
+    <div class="row">
+        
+        {% for event in event_row %}
+        <div class="col">
+            <div class="card text-center event-card">
+                <img src="{{ url_for('static', filename=event.image_url) }}"
+                    class="card-img-top mx-auto d-block event-image" alt="picture of people">
+                <div class="card-body">
+                    <h5 class="card-title"><a class="event-card-title" href="{{ url_for('view_event_details', event_id=event.id) }}">{{ event.title }}</a></h5>
+                    <hr>
+                    <p class="card-text">Event date: {{ momentjs(event.start_utc).calendar() }}</p>
+                    <p class="card-text">{{ event.description }}</p>
+                    <form action="{{ url_for('view_events') }}" method="POST">
+                        {{ form.csrf_token }}
+                        <input type="hidden" name="rsvp" value="{{ event.id }}"/>
+                        <button class="btn btn-outline-secondary" type="submit" id="rsvp">RSVP</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     {% endfor %}
-</table>
+</div>
 
 {% endblock %}
