@@ -36,6 +36,9 @@
                     <p class="card-text">Event date: {{ momentjs(event.start_utc).calendar() }}</p>
                     <p class="card-text">{{ event.description }}</p>
                     <a href="{{ url_for('view_event_details', event_id=event.id) }}" class="btn btn-outline-secondary">View Event</a>
+                    <a href="{{ url_for('view_events') }}" class="btn btn-outline-secondary">Remove Event</a>
+            
+            
                 </div>
             </div>
         </div>
@@ -63,7 +66,8 @@
                     <form action="{{ url_for('view_events') }}" method="POST">
                         {{ form.csrf_token }}
                         <input type="hidden" name="rsvp" value="{{ event.id }}"/>
-                        <button class="btn btn-outline-secondary" type="submit" id="rsvp">RSVP</button>
+                        
+                        <input onclick="this.value='Remove RSVP'" type="button" value="RSVP" id="rsvp" />
                     </form>
                 </div>
             </div>
