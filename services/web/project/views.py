@@ -268,11 +268,15 @@ def login():
             return redirect(url_for('login'))
         # Email exists and password correct
         else:
-            #login_user(user, remember=form.remember_me.data)
-
+            login_user(user, remember=form.remember_me.data)
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != " ": #if no data for prev page given
+                next_page = url_for("index") #just send them to home page
             
-            flash(f"Welcome, {user.username}")
-            return redirect(url_for('index'))
+            flash(f"Welcome, {user.username}") 
+            return redirect(next_page)
+            
+            #return redirect(url_for('index'))
 
     return render_template("login.html", form=form)
 

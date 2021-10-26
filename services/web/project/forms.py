@@ -26,6 +26,7 @@ class CreateEventForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired(), Email()])
     password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8)])
+    remember_me = BooleanField('Remember Me')
     submit = SubmitField(label="Log In")
 
 
