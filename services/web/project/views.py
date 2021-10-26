@@ -7,6 +7,7 @@ import os
 
 #from typing_extensions import Required
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import url_parse
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, logout_user, login_required, current_user, LoginManager
@@ -23,7 +24,8 @@ from project import helpers
 from project import token
 from project import email
 
-login_manager = LoginManager()
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
 
 csrf = CSRFProtect()
 
@@ -35,16 +37,18 @@ twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
 @login_manager.user_loader
 def load_user(user_id):
     """Check if user is logged-in on every page load."""
+    
     if user_id is not None:
-        return User.query.get(user_id)
+        return models.User.query.get(user_id)
     return None
 
 
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
+    
     flash('You must be logged in to view that page.')
-    return redirect('/login'))
+    return redirect("/login")
 
 
 @app.route('/')
@@ -154,6 +158,7 @@ def view_events():
     if request.method == "POST":
         if not current_user.is_authenticated:
             flash('You must be logged in to RSVP.')
+            return redirect("/login")
         else:
             flash("You are now RSVP'd to this event.")
             event_id = request.form.get("rsvp")
@@ -191,6 +196,7 @@ def view_event_details(event_id: int):
     if request.method == "POST":
         if not current_user.is_authenticated:
             flash('You must be logged in to RSVP.')
+            return redirect("/login")
         else:
             flash("You are now RSVP'd to this event.")
             event_id = request.form.get("rsvp")
@@ -213,6 +219,7 @@ def view_event_details(event_id: int):
     return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes, form=form)
 
 @app.route('/live-event/<int:event_id>')
+@login_required
 def live_event(event_id):
     return render_template('event.html')
 
@@ -243,6 +250,9 @@ def event_login():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = forms.LoginForm()
+
+    if current_user.is_authenticated: 
+        return redirect(url_for("index"))
     if request.method == "POST":
         email = request.form.get('email')
         password = request.form.get('password')
@@ -258,7 +268,9 @@ def login():
             return redirect(url_for('login'))
         # Email exists and password correct
         else:
-            login_user(user)
+            #login_user(user, remember=form.remember_me.data)
+
+            
             flash(f"Welcome, {user.username}")
             return redirect(url_for('index'))
 
