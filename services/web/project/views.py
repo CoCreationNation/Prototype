@@ -48,7 +48,7 @@ def unauthorized():
     """Redirect unauthorized users to Login page."""
     
     flash('You must be logged in to view that page.')
-    return redirect("/login")
+    return redirect(url_for('login'))
 
 
 @app.route('/')
@@ -269,14 +269,15 @@ def login():
         # Email exists and password correct
         else:
             login_user(user, remember=form.remember_me.data)
-            next_page = request.args.get('next')
-            if not next_page or url_parse(next_page).netloc != " ": #if no data for prev page given
+            next_page = request.args.get('next') #this isn't picking anything up
+            print(f"---------next_page = {next_page}------------------")
+           #TODO: include security 
+           # e.g. if not is_safe_url(next):
+            if not next_page or url_parse(next_page).netloc != "": #if no data for prev page given
                 next_page = url_for("index") #just send them to home page
             
             flash(f"Welcome, {user.username}") 
-            return redirect(next_page)
-            
-            #return redirect(url_for('index'))
+            return redirect(next_page)            
 
     return render_template("login.html", form=form)
 

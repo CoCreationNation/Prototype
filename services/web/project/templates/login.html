@@ -3,10 +3,13 @@
 
 <div class="box">
     <h1>Login</h1>
-    <form method="post">
+    <form method="POST">
       {{ form.csrf_token }}
       {{ form.email.label }} {{ form.email() }}
+      <br>
+      <br>
       {{ form.password.label }} {{ form.password() }}
+      <br>
       <br>
       <p>{{ form.remember_me() }} {{form.remember_me.label }}</p>
       <input type="submit" value="Submit">
