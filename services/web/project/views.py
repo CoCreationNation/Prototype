@@ -9,7 +9,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required, current_user, LoginManager
 import pytz
 from twilio.base.exceptions import TwilioRestException
 from twilio.jwt.access_token import AccessToken
@@ -23,11 +23,29 @@ from project import helpers
 from project import token
 from project import email
 
+login_manager = LoginManager()
+
 csrf = CSRFProtect()
 
 twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
 twilio_api_key_sid = os.environ.get('TWILIO_API_KEY_SID')
 twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Check if user is logged-in on every page load."""
+    if user_id is not None:
+        return User.query.get(user_id)
+    return None
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    """Redirect unauthorized users to Login page."""
+    flash('You must be logged in to view that page.')
+    return redirect('/login'))
+
 
 @app.route('/')
 def index():
