@@ -384,3 +384,18 @@ def delete_user(user_id):
 def about_us():
     return render_template("about-us.html") 
 
+
+@app.route('/stories')
+def stories():
+    return render_template("stories.html")
+
+
+@app.route('/resources')
+def resources():
+    return render_template("resources.html")
+
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
