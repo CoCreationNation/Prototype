@@ -5,6 +5,7 @@ This file is used to initiate all forms
 
 #from Prototype.services.web.project.models import Event
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, TextAreaField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import DataRequired, Email, Length
@@ -43,6 +44,8 @@ class RegistrationForm(FlaskForm):
     city = StringField(label='City')
     state = StringField(label='State')
     phone_number = StringField(label='Phone Number')
+    picture = FileField('Picture', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+
 
 class RSVPForm(FlaskForm):
     submit = SubmitField(label='RSVP')

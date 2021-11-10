@@ -14,6 +14,7 @@ import pytz
 from twilio.base.exceptions import TwilioRestException
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VideoGrant, ChatGrant
+from werkzeug.utils import secure_filename
 
 from project import app
 from project import db
@@ -228,6 +229,8 @@ def login():
     if request.method == "POST":
         email = request.form.get('email')
         password = request.form.get('password')
+        print(f'----email = {email}-------')
+        print(f'---- password = {password}-----')
 
         user = models.User.query.filter_by(email=email).first()
         # Email doesn't exist
@@ -249,19 +252,45 @@ def login():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    print("****We're in register route****")
+    
+    
     form = forms.RegistrationForm()
     if request.method == "POST":
+        print("****We are in the POST request****")
 
         if models.User.query.filter_by(email=request.form.get('email')).first():
             #User already exists
+            print("**This user exists somehow***")
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
+        print("****we are before picture****")
+
+        #DEBUG! isn't receiving picture file from WTF Flask form but is from 
+        # # typical HTML form 
+
+        # file = request.files['file']
+        # # If the user does not select a file, the browser submits an
+        # # empty file without a filename.
+        # if file.filename == '':
+        #     flash('No selected file')
+        #     return redirect(request.url)
+        # if file:
+        #     filename = secure_filename(file.filename)
+        #     print(f"---filename = {filename}----") 
+        #     #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+
 
         hash_and_salted_password = generate_password_hash(
             request.form.get('password'),
             method='pbkdf2:sha256',
             salt_length=8
         )
+        
+        
+   
+
         new_user = models.User(
             email=request.form.get('email'),
             username=request.form.get('username'),
@@ -339,6 +368,8 @@ def edit_profile(user_id):
     state = form.state.data
     zip_code = form.zip_code.data
     phone_number = form.phone_number.data
+    picture = secure_filename(form.picture.data.filename)
+    print(f"profile picture = {picture}")
 
     if request.method == "POST": #TODO: Get URL from user's uploaded pic and store in AWS S3
         user = helpers.update_user_details(user_id, first_name, last_name,
