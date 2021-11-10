@@ -340,7 +340,7 @@ def edit_profile(user_id):
     zip_code = form.zip_code.data
     phone_number = form.phone_number.data
 
-    if request.method == "POST": 
+    if request.method == "POST": #TODO: Get URL from user's uploaded pic and store in AWS S3
         user = helpers.update_user_details(user_id, first_name, last_name,
                                            pronouns, address_1, city, state, zip_code, phone_number)
         return redirect("/user-profile/" + str(user_id))
