@@ -3,7 +3,7 @@
 This file is used to instantiate the Flask app.
 """
 
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_bootstrap import Bootstrap
@@ -20,6 +20,9 @@ db = SQLAlchemy(app)
 # csrf = CSRFProtect(app) # TODO: add CSRF token through JavaScript. Removed for issues with video chat. https://stackoverflow.com/questions/22854749/flask-and-ajax-post-http-400-bad-request-error
 mail = Mail(app)
 
+@app.route("/static/<path:filename>")
+def staticfiles(filename):
+    return send_from_directory(app.config["STATIC_FOLDER"], filename)
 
 
 # while it is usually better to do all imports at the top of the file, importing here mid-file is a best practice for Flask

@@ -17,6 +17,7 @@ class Config(object):
     # SECRET_KEY = os.urandom(12)
     SECRET_KEY = 'bar-apple'
     SECURITY_PASSWORD_SALT = 'foo-banana'
+    STATIC_FOLDER = f"{os.getenv('APP_FOLDER')}/project/static"
 
     # mail settings
     MAIL_SERVER = 'smtp.googlemail.com'

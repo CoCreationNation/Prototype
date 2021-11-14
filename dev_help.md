@@ -51,3 +51,19 @@ select * from events;
 ```
 
 Use `ctrl + d` to exit the psql session.
+
+
+# For Production
+
+To SSH into the EC2 server, you will need the RSA key file ("ccn_prototype.cer") and execute the following command:
+``` Bash
+ssh -i "ccn_prototype.cer" ubuntu@ec2-3-142-174-160.us-east-2.compute.amazonaws.com
+```
+
+Use these command to build and take down the production site:
+``` Bash
+docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
+
+docker-compose down -v
+```
