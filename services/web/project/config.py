@@ -5,7 +5,14 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite://")
+    ENVIRONMENT = os.getenv("ENVIRONMENT")
+    if ENVIRONMENT == 'prod':
+        host = os.getenv('RDS_HOST')
+        username = os.getenv('RDS_MASTER_USER')
+        password = os.getenv('RDS_MASTER_PASSWORD')
+        SQLALCHEMY_DATABASE_URI = f'postgresql://{username}:{password}@{host}:5432/postgres'
+    else:
+        SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite://")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # SECRET_KEY = os.urandom(12)
     SECRET_KEY = 'bar-apple'
