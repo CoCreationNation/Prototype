@@ -5,17 +5,17 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <img class='img-fluid w-100' src="{{ url_for('static', filename='people_at_counter.jpeg') }}"
+        <img class='img-fluid w-100' src="{{ url_for('static', filename='homepage_banner.jpeg') }}"
             alt="Group of people" />
     </div>
 </div>
 <div class="container">
     <div class="row">
-        <h1>CCN: Execution in Alignment</h1>
+        <h1>Our Mindset: Reckoning + Repairing = Executing In Alignment</h1>
     </div>
     <hr>
     <div class="row">
-        <h2>About Us</h2>
+        <h2>Civic Engagement In Terms Of Economic Development</h2>
     </div>
     <div class="row">
         <div class="col text-center">
@@ -34,7 +34,7 @@
     <div class="row">
         <div class="col">
             <div class="card text-center community-role-card" style="width: 16rem;">
-                <img src="{{ url_for('static', filename='community_member.jpeg') }}"
+                <img src="{{ url_for('static', filename='missing.jpeg') }}"
                     class="card-img-top mx-auto d-block community-roles-image" alt="picture of person">
                 <div class="card-body">
                     <h5 class="card-title">Community members</h5>
@@ -47,7 +47,7 @@
         </div>
         <div class="col">
             <div class="card text-center community-role-card" style="width: 16rem;">
-                <img src="{{ url_for('static', filename='community_leader.jpeg') }}"
+                <img src="{{ url_for('static', filename='missing.jpeg') }}"
                     class="card-img-top mx-auto d-block community-roles-image" alt="picture of person">
                 <div class="card-body">
                     <h5 class="card-title">Community Leaders</h5>
@@ -58,7 +58,7 @@
         </div>
         <div class="col">
             <div class="card text-center community-role-card" style="width: 16rem;">
-                <img src="{{ url_for('static', filename='intentional_citizen.jpeg') }}"
+                <img src="{{ url_for('static', filename='missing.jpeg') }}"
                     class="card-img-top mx-auto d-block community-roles-image" alt="picture of person">
                 <div class="card-body">
                     <h5 class="card-title">Intentional Citizen</h5>
@@ -86,7 +86,7 @@
     <div class="row">
         <div class="col">
             <div class="card text-center" style="width: 30rem;">
-                <img src="{{ url_for('static', filename='event1.jpeg') }}"
+                <img src="{{ url_for('static', filename='event1.png') }}"
                     class="card-img-top mx-auto d-block landing-event-image" alt="picture of people">
                 <div class="card-body">
                     <h5 class="card-title">Equitable Access To Rural Health Care Series</h5>
@@ -101,9 +101,9 @@
                 <img src="{{ url_for('static', filename='event2.jpeg') }}"
                     class="card-img-top mx-auto d-block landing-event-image" alt="picture of person">
                 <div class="card-body">
-                    <h5 class="card-title">Rural Entrepreneurship</h5>
-                    <p class="card-text">Mindfulness in Grant Writing</p>
-                    <p class="card-text">December 3, 2021</p>
+                    <h5 class="card-title">Equitable Access To Rural Health Care Series</h5>
+                    <p class="card-text">What happens when you dial 911 and nobody answers in Rural America.</p>
+                    <p class="card-text">December 17, 2021</p>
                     <a href="{{ url_for('view_events') }}" class="btn btn-outline-secondary">Sign up</a>
                 </div>
             </div>
@@ -115,6 +115,33 @@
         </div>
     </div>
     <hr>
+    <div class="row">
+        <h2>Stories</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card text-center" style="width: 30rem;">
+                <img src="{{ url_for('static', filename='story1.jpeg') }}"
+                    class="card-img-top mx-auto d-block landing-event-image" alt="picture of people">
+                <div class="card-body">
+                    <h5 class="card-title">Worth The Shot Campaign</h5>
+                    <p class="card-text">Covid Campus Coalition</p>
+                    <a href="{{ url_for('stories') }}" class="btn btn-outline-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center" style="width: 30rem;">
+                <img src="{{ url_for('static', filename='story2.png') }}"
+                    class="card-img-top mx-auto d-block landing-event-image" alt="picture of person">
+                <div class="card-body">
+                    <h5 class="card-title">Teen Town Hall for Rural and Urban Americans</h5>
+                    <p class="card-text">Teens for Vaccines</p>
+                    <a href="{{ url_for('stories') }}" class="btn btn-outline-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>

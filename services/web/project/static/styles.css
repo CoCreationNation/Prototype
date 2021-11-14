@@ -111,3 +111,8 @@
 .form-group {
     margin: 20px;
 }
+.research-table {
+    border: 2px solid black;
+    padding: 8px;
+    margin: 8px;
+}

@@ -7,6 +7,7 @@ import os
 
 #from typing_extensions import Required
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, logout_user, login_required, current_user
@@ -225,9 +226,9 @@ def event_login():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = forms.LoginForm()
-    if request.method == "POST":
-        email = request.form.get('email')
-        password = request.form.get('password')
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
 
         user = models.User.query.filter_by(email=email).first()
         # Email doesn't exist
@@ -257,6 +258,10 @@ def register():
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
 
+        file = form.profile_picture.data
+        filename = secure_filename(file.filename)
+        # TODO: save file to s3, then store file location in User model
+
         hash_and_salted_password = generate_password_hash(
             request.form.get('password'),
             method='pbkdf2:sha256',
@@ -265,11 +270,11 @@ def register():
         new_user = models.User(
             email=request.form.get('email'),
             username=request.form.get('username'),
-            password=hash_and_salted_password,
-            zip_code=request.form.get('zip_code')
+            password=hash_and_salted_password
         )
         db.session.add(new_user)
         db.session.commit()
+
         login_user(new_user)
         flash('Your account has been registered.')
 
