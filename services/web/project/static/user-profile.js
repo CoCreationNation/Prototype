@@ -4,7 +4,7 @@
 
 // alert("create-event.js is connected!");
 
-//when you click "Upload Image"
+//when you click "Upload Image", this will help display it
 var loadFile = function(event) {
     //grab image
     var image = document.getElementById('output');
@@ -13,7 +13,7 @@ var loadFile = function(event) {
     
     image.src = URL.createObjectURL(event.target.files[0]);
     //TODO: send URL to AWS S3 bucket and store
-    
+
     
 };
- 
+
