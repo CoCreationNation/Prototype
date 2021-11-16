@@ -62,8 +62,10 @@ ssh -i "ccn_prototype.cer" ubuntu@ec2-3-142-174-160.us-east-2.compute.amazonaws.
 
 Use these command to build and take down the production site:
 ``` Bash
-docker-compose -f docker-compose.prod.yml up -d --build
-docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
+sudo docker-compose -f docker-compose.prod.yml up -d --build
+sudo docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
 
-docker-compose down -v
+sudo docker-compose -f docker-compose.prod.yml logs -f
+
+sudo docker-compose -f docker-compose.prod.yml down -v
 ```
