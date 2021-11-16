@@ -1,3 +1,4 @@
+#from Prototype.services.web.project.models import EventAttendees
 from datetime import datetime
 import os
 from typing import Optional
@@ -115,7 +116,7 @@ def get_future_user_events(user_id: int) -> list:
     for record in user_events:
         event = models.Event.query.filter(models.Event.id == record.event_id).first()
         print(f'start type: {type(event.start_utc)}')
-        if (event.start_utc.replace(tzinfo=None)) > now:
+        if (event.start_utc.replace(tzinfo=None)) > now: #need to add condition of rsvp
             future_events.append(event)
     
     return future_events
@@ -142,6 +143,10 @@ def group_list_by_threes(items: list, new_list: Optional[list] = None) -> list:
         group_list_by_threes(new_items, new_list)
     
     return new_list
+
+def remove_rsvp(event_id, user_id):
+
+    return models.EventAttendees.query.filter_by(event_id = event_id, attendee_id=user_id).delete()
 
 
 def delete_user(user_id):

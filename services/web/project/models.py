@@ -113,7 +113,7 @@ class EventTags(db.Model):
 
 
 class EventEligibleZipcode(db.Model):
-    __tablename__ = "event_elogible_zipcodes"
+    __tablename__ = "event_eligible_zipcodes"
 
     id = db.Column(db.Integer,
                    primary_key=True,

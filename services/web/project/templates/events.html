@@ -67,7 +67,7 @@
                         {{ form.csrf_token }}
                         <input type="hidden" name="rsvp" value="{{ event.id }}"/>
                         
-                        <input onclick="this.value='Remove RSVP'" type="button" value="RSVP" id="rsvp" />
+                        <input onclick="this.value='Remove RSVP'" name = "remove-rsvp" type="button" value="{{ event.id }}" id="rsvp" />
                     </form>
                 </div>
             </div>

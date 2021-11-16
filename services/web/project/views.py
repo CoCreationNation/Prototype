@@ -130,6 +130,7 @@ def view_events():
     events_by_three = helpers.group_list_by_threes(events)
     
     user_events = helpers.get_future_user_events(current_user.id) if current_user.is_authenticated else []
+    
 
     form = forms.RSVPForm()
 
@@ -156,6 +157,34 @@ def view_events():
                 db.session.add(rsvp)
                 db.session.commit()
     return render_template('events.html', events_by_three=events_by_three, user_events=user_events, form=form)
+
+
+def remove_event(user_id, event_id):
+
+    form = forms.RSVPForm()
+    events = helpers.get_future_events()
+
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            flash('You must be logged in to RSVP.')
+        else:
+            
+            event_id = request.form.get("remove-rsvp")
+            user_id = current_user.get_id()
+            helpers.remove_rsvp(user_id, event_id)
+            db.session.commit()
+            flash('You remove RSVPd events')
+            return render_template('events.html',form = form, events = events)
+    return render_template('events.html', form = form, events = events)
+
+     
+
+    
+   
+    
+
+    
+
 
 
 @app.route('/events/<int:event_id>', methods=["GET", "POST"])
@@ -378,6 +407,7 @@ def delete_user(user_id):
         return render_template("all-users.html", form=form, user=user)
     else:
         render_template("all-users.html", users=users, form=form)
+
 
 
     
