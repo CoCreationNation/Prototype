@@ -7,10 +7,10 @@ import os
 
 #from typing_extensions import Required
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
+from werkzeug.utils import url_parse, secure_filename
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required, current_user, LoginManager
 import pytz
 from twilio.base.exceptions import TwilioRestException
 from twilio.jwt.access_token import AccessToken
@@ -24,11 +24,32 @@ from project import helpers
 from project import token
 from project import email
 
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
+
 csrf = CSRFProtect()
 
 twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
 twilio_api_key_sid = os.environ.get('TWILIO_API_KEY_SID')
 twilio_api_key_secret = os.environ.get('TWILIO_API_KEY_SECRET')
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Check if user is logged-in on every page load."""
+    
+    if user_id is not None:
+        return models.User.query.get(user_id)
+    return None
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    """Redirect unauthorized users to Login page."""
+    
+    flash('You must be logged in to view that page.')
+    return redirect(url_for('login'))
+
 
 @app.route('/')
 def index():
@@ -137,6 +158,7 @@ def view_events():
     if request.method == "POST":
         if not current_user.is_authenticated:
             flash('You must be logged in to RSVP.')
+            return redirect("/login")
         else:
             flash("You are now RSVP'd to this event.")
             event_id = request.form.get("rsvp")
@@ -174,6 +196,7 @@ def view_event_details(event_id: int):
     if request.method == "POST":
         if not current_user.is_authenticated:
             flash('You must be logged in to RSVP.')
+            return redirect("/login")
         else:
             flash("You are now RSVP'd to this event.")
             event_id = request.form.get("rsvp")
@@ -196,6 +219,7 @@ def view_event_details(event_id: int):
     return render_template('event_details.html', event=event, event_tags = final_list_tags, eligible_zipcodes=final_zipcodes, form=form)
 
 @app.route('/live-event/<int:event_id>')
+@login_required
 def live_event(event_id):
     return render_template('event.html')
 
@@ -226,6 +250,10 @@ def event_login():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = forms.LoginForm()
+
+    if current_user.is_authenticated: 
+        return redirect(url_for("index"))
+ 
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
@@ -241,9 +269,16 @@ def login():
             return redirect(url_for('login'))
         # Email exists and password correct
         else:
-            login_user(user)
-            flash(f"Welcome, {user.username}")
-            return redirect(url_for('index'))
+            login_user(user, remember=form.remember_me.data)
+            next_page = request.args.get('next') #this isn't picking anything up
+            print(f"---------next_page = {next_page}------------------")
+           #TODO: include security 
+           # e.g. if not is_safe_url(next):
+            if not next_page or url_parse(next_page).netloc != "": #if no data for prev page given
+                next_page = url_for("index") #just send them to home page
+            
+            flash(f"Welcome, {user.username}") 
+            return redirect(next_page)            
 
     return render_template("login.html", form=form)
 
