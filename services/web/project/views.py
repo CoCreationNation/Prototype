@@ -7,7 +7,7 @@ import os
 
 #from typing_extensions import Required
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.urls import url_parse
+from werkzeug.utils import url_parse, secure_filename
 from flask import render_template, request, url_for, redirect, flash, abort, jsonify
 from flask_wtf.csrf import CSRFProtect
 from flask_login import login_user, logout_user, login_required, current_user, LoginManager
@@ -253,9 +253,10 @@ def login():
 
     if current_user.is_authenticated: 
         return redirect(url_for("index"))
-    if request.method == "POST":
-        email = request.form.get('email')
-        password = request.form.get('password')
+ 
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
 
         user = models.User.query.filter_by(email=email).first()
         # Email doesn't exist
@@ -292,6 +293,10 @@ def register():
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
 
+        file = form.profile_picture.data
+        filename = secure_filename(file.filename)
+        # TODO: save file to s3, then store file location in User model
+
         hash_and_salted_password = generate_password_hash(
             request.form.get('password'),
             method='pbkdf2:sha256',
@@ -300,11 +305,11 @@ def register():
         new_user = models.User(
             email=request.form.get('email'),
             username=request.form.get('username'),
-            password=hash_and_salted_password,
-            zip_code=request.form.get('zip_code')
+            password=hash_and_salted_password
         )
         db.session.add(new_user)
         db.session.commit()
+
         login_user(new_user)
         flash('Your account has been registered.')
 
@@ -418,4 +423,19 @@ def delete_user(user_id):
 @app.route('/about-us')
 def about_us():
     return render_template("about-us.html") 
+
+
+@app.route('/stories')
+def stories():
+    return render_template("stories.html")
+
+
+@app.route('/resources')
+def resources():
+    return render_template("resources.html")
+
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
 

@@ -12,7 +12,7 @@
         <div class="col text-center">
             <div class="embed-responsive embed-responsive-4by3">
                 <iframe width="560" height="315" class="embed-responsive-item"
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0"
+                    src="{{ url_for('static', filename='about_us_video_1.mp4') }}" title="About Us" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
             </div>
@@ -22,38 +22,114 @@
 <div class="container-fluid">
     <div class="row dark-container">
         <div class="container inner-container">
-            <div class="row text-center dark-row">
-                <div class="col">
-                    <h1>Mission</h1>
-                </div>
-                <div class="col">
-                    <h1>Values</h1>
-                </div>
-                <div class="col">
-                    <h1>Goal</h1>
-                </div>
+            <div class="row dark-row">
+                <h1>Mission</h1>
             </div>
             <div class="row dark-row">
+                <p>
+                    Re-imagining the civic engagement experience that provides a safe, non-judgemental and uncomplicated space for community residents and leaders to heal collectively.
+                </p>
+            </div>
+            <div class="row dark-row">
+                <h1>Vision</h1>
+            </div>
+            <div class="row dark-row">
+                <p>
+                    Cultivating the art of human dignity as an intentional economy. 
+                </p>
+            </div>
+            <div class="row dark-row">
+                <h1>Goal</h1>
+            </div>
+            <div class="row dark-row">
+                <p>
+                    Boost civic engagement in a culturally unhealthy, polarized society. Aiming to heal forward about 57.23 million people living in Rural America by 2050.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid off-white-container">
+    <div class="row">
+        <div class="container inner-container">
+            <div class="row text-center">
+                <h1>Who We Are</h1>
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <h3>Our Impact</h3>
+                    <img class="img-fluid" src="{{ url_for('static', filename='map.jpeg') }}" alt="picture of person">
+                </div>
+                <div class="col text-center">
+                    <h3>The Team Behind Co-Creation Nation</h3>
+                    <img class="img-fluid" src="{{ url_for('static', filename='team.png') }}" alt="picture of CCN team">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="container inner-container">
+            <div class="row text-center">
+                <h1>Our Research</h1>
+            </div>
+            <div class="row">
                 <div class="col">
                     <p>
-                        Re-imagining the civic engagement experience that provides a safe, non-judgmental, and uncomplicated space for community residents and leaders to heal collectively.
+                        Our team recognizes the challenge of our initial research remaining relevant in a rapidly evolving organization founded during a global pandemic. 
+                        As times continue to change and the world begins to open up, our hope is that the outcomes of the Co-Creation Nation Project will continue to serve as inspiration for the future of one united nation.
                     </p>
                 </div>
-                <div class="col">
-                    <p>
-                        Inclusion - Fostering communities where we all have to win. No more excuses.
-                    </p>
-                    <p>
-                        Equity - Putting an inflection point on the cultural mix that invests first in collective healing so no one is left behind.
-                    </p>
-                    <p>
-                        Transparency - Using human dignity as our moral compass to walk the talk.
-                    </p>
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <h4>Research Question</h4>
                 </div>
+                <div class="col text-center">
+                    <h4>Mixed-Method Research Approach</h4>
+                </div>
+                <div class="col text-center">
+                    <h4>Direct Participation, Observation and In-Depth Interviews</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col research-table">
+                    To study the current mind-set in Rural & Urban America.
+                </div>
+                <div class="col research-table">
+                    To capture motivations and demographics.
+                </div>
+                <div class="col research-table">
+                    To understand the process first-hand.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col research-table">
+                    How can we design an civic engagement experience that can help our nation heal forward together?
+                </div>
+                <div class="col research-table">
+                    Literature | Open Data Source | Surveys | Polls 
+                </div>
+                <div class="col research-table">
+                    Virtual Events and in-Person & Phone Conversations
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid light-gray-container">
+    <div class="row">
+        <div class="container inner-container">
+            <div class="row">
+                <h2>The Opportunity</h2>
+            </div>
+            <div class="row">
+                <h5>A New Approach to Civic Engagement that we call, The  L.E.A. Model.</h5>
+            </div>
+            <div class="row text-center">
                 <div class="col">
-                    <p>
-                        To transform the way communities come together.
-                    </p>
+                    <img class="img-fluid" src="{{ url_for('static', filename='lea.png') }}">
                 </div>
             </div>
         </div>
@@ -63,49 +139,71 @@
     <div class="row">
         <div class="container inner-container">
             <div class="row">
-                <div class="col">
-                    <img class="img-fluid" src="{{ url_for('static', filename='map.jpeg') }}" alt="picture of person">
+                <h2>Our Discover Process</h2>
+            </div>
+            <div class="row">
+                <div class="col-4 research-table">
+                    <h4>Empathy Map</h4>
                 </div>
-                <div class="col">
-                    <h2>About Co-Creation Nation</h2>
+                <div class="col-7 research-table">
+                    <h4>Ideation and Prototype Design</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 research-table">
                     <p>
-                        Co-Creation Nation, a project of Nxt Wave Founders, is an idea awarded by the 2021 Eductation (RE) Open Challenge sponsored by the University of Southern California Center EDGE program, the Andrew Nikou Foundation, and Open-Ideo.
+                        A current civic engagement experience map highlighted the complexity of the entire process in our nation, helping identify opportunities to improve to address systemic issues that worsened during the pandemic.
                     </p>
+                </div>
+                <div class="col-7 research-table">
                     <p>
-                        Due to Covid-19, many rural and under-resourced individuals like parents, students, teachers, school nurses, and emergency doctors continue to face complex , multi-dimensional issues where confrontation, misinformation, and inclusion prevent hyper-local officials and businesses from finding the best answers to numerous social and economic barriers to equitable education, rethinking career learning, fair lending, social justice, access to telehealth, cliamte change, and reliable infrastructure, among other issues.
+                        Our  prototype aims to improve the civic engagement experience by reducing pain points of our rural communities. The new format makes civic engagement more approachable for community leaders and residents and help  them evolve into experts. 
                     </p>
-                    <p>
-                        CCN is an open source project that helps rural and under-resourced citizens, schools, businesses, governments, and community-based organizations solve socio-economic structural problems magnified by the Covid-19 Pandemic through effective civic engagement.
-                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 research-table">
+                    <img class="img-fluid" src="{{ url_for('static', filename='empathy-map.png') }}">
+                </div>
+                <div class="col-7 research-table">
+                    <img class="img-fluid" src="{{ url_for('static', filename='missing.jpeg') }}">
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid light-gray-container">
+<div class="container-fluid">
     <div class="row">
         <div class="container inner-container">
-            <div class="row text-center">
-                <div class="col">
-                    <h1>L. E. A.</h1>
-                    <br>
+            <div class="row">
+                <h2>Our Beliefs</h2>
+            </div>
+            <div class="row">
+                <div class="col research-table">
+                    <h4>Inclusion</h4>
+                </div>
+                <div class="col research-table">
+                    <h4>Equity</h4>
+                </div>
+                <div class="col research-table">
+                    <h4>Transparency</h4>
                 </div>
             </div>
-            <div class="row text-center">
-                <div class="col">
-                    <div class="row"><i class="fas fa-volume-up fa-4x"></i></div>
-                    <div class="row"><div class="col dark-box d-flex"><span class="my-auto mx-auto">LISTEN</span></div></div>
-                    <div class="row">Actively listen to everyone in the community</div>
+            <div class="row">
+                <div class="col research-table">
+                    <p>
+                        Fostering communities where we all have to win. No more excuses.
+                    </p>
                 </div>
-                <div class="col">
-                    <div class="row"><i class="fas fa-running fa-4x"></i></div>
-                    <div class="row"><div class="col dark-box d-flex"><span class="my-auto mx-auto">EXECUTE</span></div></div>
-                    <div class="row">Take imminent action from informed deliberation</div>
+                <div class="col research-table">
+                    <p>
+                        Putting an inflection point on the cultural mix that invests first in collective healing so no-one is left behind.
+                    </p>
                 </div>
-                <div class="col">
-                    <div class="row"><i class="fas fa-align-justify fa-4x"></i></div>
-                    <div class="row"><div class="col dark-box d-flex"><span class="my-auto mx-auto">ALIGN</span></div></div>
-                    <div class="row">Align best solutions to common ground and community values</div>
+                <div class="col research-table">
+                    <p>
+                        Using human dignity as our moral compass to walk the talk.
+                    </p>
                 </div>
             </div>
         </div>
@@ -116,13 +214,13 @@
         <div class="container inner-container text-center">
             <div class="row">
                 <div class="col">
-                    <h1>Vision</h1>
+                    <h1>About Co-Creation Nation</h1>
                     <br>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <p>Cultivating the art of human dignity as an intentional economy.</p>
+                    <p>Co-Creation Nation — a project of Nxt Wave Founders, is an idea awarded by the 2021 Education (Re) Open Challenge sponsored by the University of South California’s Center Edge, the Andrew Nikou Foundation and Open-Ideo. Due to Covid-19, many rural and under-resourced individuals like parents, students, teachers, school nurses and emergency doctors continue to face complex, multi-dimensional issues where confrontation, misinformation and inclusion prevent hyper-local officials and businesses from finding the best answers to numerous social and economic barriers to equitable education, rethinking career learning, fair lending, social justice, access to telehealth, climate change and reliable infrastructure among other related issues. CCN is an open source project that helps rural and under-resourced citizens, schools, businesses, governments, and community based-organizations solve socio-economic structural problems magnified by the Covid-19 Pandemic through effective civic engagement.</p>
                 </div>
             </div>
         </div>

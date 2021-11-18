@@ -15,7 +15,7 @@
 }
 
 .community-role-card {
-    height: 420px;
+    height: 480px;
 }
 
 .landing-event-image {
@@ -70,6 +70,10 @@
     color: white;
 }
 
+.green-container {
+    background-color: #27ba84;
+}
+
 .inner-container {
     max-width: 1200px;
     padding: 80px;
@@ -81,4 +85,34 @@
     font-size: 1.4em;
     margin: 20px 20%;
     height: 150px;
+}
+
+.gray-box-section {
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 60px;
+    margin: 20px;
+}
+
+.left-border {
+    border-left: 2px solid black
+}
+
+.black-links {
+    color: black;
+}
+
+.light-gray-box {
+    background-color: lightgray;
+    height: 300px;
+    margin: 20px;
+}
+
+.form-group {
+    margin: 20px;
+}
+.research-table {
+    border: 2px solid black;
+    padding: 8px;
+    margin: 8px;
 }

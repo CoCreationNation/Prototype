@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
     address_2 = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
-    zip_code = db.Column(db.Integer, nullable=False)
+    zip_code = db.Column(db.Integer, nullable=True)
     phone_number = db.Column(db.String)
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)

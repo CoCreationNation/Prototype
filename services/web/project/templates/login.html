@@ -1,20 +1,26 @@
-{% extends "base.html" %}
+
+{% extends 'base.html' %}
+
+{% block title %}Sign In{% endblock %}
 {% block content %}
 
-<div class="box">
-    <h1>Login</h1>
-    <form method="POST">
-      {{ form.csrf_token }}
-      {{ form.email.label }} {{ form.email() }}
-      <br>
-      <br>
-      {{ form.password.label }} {{ form.password() }}
-      <br>
-      <br>
-      <p>{{ form.remember_me() }} {{form.remember_me.label }}</p>
-      <input type="submit" value="Submit">
-    </form>
+<div class="container inner-container">
+  <h1>Sign In</h1>
+  <form action="{{ url_for('login') }}" method="post">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      <label for="email">{{ form.email.label }}</label>
+      {{ form.email(class_="form-control") }}
+    </div>
+    <div class="form-group">
+      <label for="password">{{ form.password.label }}</label>
+      {{ form.password(class_="form-control") }}
+    </div>
+
+    <button type="submit" class="btn btn-outline-secondary" value="Submit">Submit</button>
+  </form>
 </div>
+
 <br>
 <div class = "box">
   <h7>Don't have an account? <a href="/sign-up">Register here.</a></h7>
