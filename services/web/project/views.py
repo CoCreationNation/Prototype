@@ -368,24 +368,25 @@ def show_profile(user_id):
 @login_required
 def edit_profile(user_id): 
     """Gather and save edited info to signed in user"""
-
     form = forms.RegistrationForm()
+    if not current_user.is_authenticated or current_user.user_type != 'admin':
+        flash("You do not have permission to edit these details.")
+    else:
+        first_name = form.first_name.data 
+        last_name = form.last_name.data
+        pronouns = form.pronouns.data
+        address_1 = form.address_1.data
+        city = form.city.data
+        state = form.state.data
+        zip_code = form.zip_code.data
+        phone_number = form.phone_number.data
 
-    first_name = form.first_name.data 
-    last_name = form.last_name.data
-    pronouns = form.pronouns.data
-    address_1 = form.address_1.data
-    city = form.city.data
-    state = form.state.data
-    zip_code = form.zip_code.data
-    phone_number = form.phone_number.data
+        if request.method == "POST": 
+            user = helpers.update_user_details(user_id, first_name, last_name,
+                                            pronouns, address_1, city, state, zip_code, phone_number)
+            return redirect("/user-profile/" + str(user_id))
 
-    if request.method == "POST": 
-        user = helpers.update_user_details(user_id, first_name, last_name,
-                                           pronouns, address_1, city, state, zip_code, phone_number)
-        return redirect("/user-profile/" + str(user_id))
-
-    user = helpers.get_user_info(user_id)
+        user = helpers.get_user_info(user_id)
     
     #TODO: Allow user to update their email/username(?) and add check for dupe usernames/email validation
 
